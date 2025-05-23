@@ -1,14 +1,22 @@
+<p align="center"><img src="/attached_assets/cryptopayroll.png" width="480"\></p>
+
 # 💧 SuiAuditWarp 🌀
 **AI-Powered Smart Contract Audits for Move, Secured On-Chain with Sui + Cross-Chain Access via Wormhole**
+
+---
 
 ### 🚀 Live Demo / DApp Simulator
 
 Check out the live demo here: [🔗 SuiAuditWarp DApp Simulator](https://audit-warp.vercel.app/)
 
+---
+
 ### 📄 Sui Deployment (Testnet)
 
 - **Sui Contract Address (Testnet):** [`0x0d865f8b0ca4c353fbc142af6b74d88c4ec49d28c970b58c48b5599e1d314914`](https://testnet.suivision.xyz/package/0x0d865f8b0ca4c353fbc142af6b74d88c4ec49d28c970b58c48b5599e1d314914?tab=Code)  
 - **Deployer Address (Testnet):** [`0x768478578364d08dfc4e7c114a883602289256f0e603b64f58eb14ac288ab673`](https://testnet.suivision.xyz/account/0x768478578364d08dfc4e7c114a883602289256f0e603b64f58eb14ac288ab673)
+
+---
 
 ## 🧠 Architecture Overview
 
@@ -80,6 +88,8 @@ yarn dev
 ```
 **Visit:** <http://localhost:3000>
 
+---
+
 ### 🛠 Dependencies
 - React
 - OpenAI API
@@ -90,12 +100,15 @@ yarn dev
 - Wormhole SDK
 - React-PDF
 - Web3-React
-- Move Analyzer 
+- Move Analyzer
+
+---
 
 ### ✅ Enhancement
 - Move Analyzer
 - Compiler for Sui codes
 
+---
 
 ### 🧪 Coming Soon
 - Multi-agent AI audit consensus (voting mechanism)
@@ -103,6 +116,8 @@ yarn dev
 - Tokenized credit system for audits
 - Plugin system for third-party LLMs and chains
 - SDK
+
+---
 
 ### 🤝 Contributing
 PRs and issues are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
