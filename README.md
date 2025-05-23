@@ -1,4 +1,4 @@
-# 🕵️‍♂️ SuiAuditWarp  
+# 💧 SuiAuditWarp 🌀
 **AI-Powered Smart Contract Audits for Move, Secured On-Chain with Sui + Cross-Chain Access via Wormhole**
 
 ### 🚀 Live Demo / DApp Simulator
@@ -13,19 +13,21 @@ Check out the live demo here: [🔗 SuiAuditWarp DApp Simulator](https://audit-w
 ## 🧠 Architecture Overview
 
 - **User** sends code to **Frontend**  
-- **Frontend** calls the **AI Agent** _and_ directly writes to **IPFS**  
+- **Frontend** calls the **AI Agent** _and_ directly writes to **IPFS/Walrus**  
 - **AI Agent** sends analysis to a **Server**, which generates the **PDF Report**  
-- **PDF Report** is uploaded to **IPFS**  
+- **PDF Report** is uploaded to **IPFS/Walrus**  
 - **IPFS** then feeds into the **Sui NFT Mint**  
-- Finally, the **Wormhole SDK** bridges the proof‑NFT out to any **EVM Chain** and back  
+- Finally, the **Wormhole SDK** bridges the proof‑NFT out to any **EVM Chain** and back
+- Optionally, the **Move Analyzer** for code compiling assistance 
 
 ---
 
 - **Frontend**: Built with `React`, `Tailwind CSS`, `Radix UI`, `Viem`
-- **AI Engine**: Uses `OpenAI API` or 'Google Gemini' for LLM-based code analysis (pluggable AI api's for: deepseek , Anthropics and more )
+- **AI Engine**: Uses `OpenAI API` or 'Google Gemini' for LLM-based code analysis (pluggable AI api's for: 'deepseek' , 'Anthropics' and more )
 - **Storage**: Generates PDF reports → uploads to `IPFS` (via Pinata or Walrus)
 - **Proof**: Mints Sui NFTs containing audit metadata and IPFS hash
 - **Cross-chain Access**: Wormhole SDK enables EVM ↔ Sui communication
+- **Sui Code-Support**: Move Analyzer enables compiler support features for Move programming language
 - **Wallets Supported**: `DappKit` (Sui), `Web3-react` (EVM)
 
 ---
@@ -43,7 +45,7 @@ Check out the live demo here: [🔗 SuiAuditWarp DApp Simulator](https://audit-w
 
 ---
 
-## 🚀 Installation & Local Setup
+## 👷🏻‍♂️ Installation & Local Setup
 
 ### 1. Clone the Repo
 
@@ -88,6 +90,11 @@ yarn dev
 - Wormhole SDK
 - React-PDF
 - Web3-React
+- Move Analyzer 
+
+### ✅ Enhancement
+- Move Analyzer
+- Compiler for Sui codes
 
 
 ### 🧪 Coming Soon
