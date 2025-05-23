@@ -1,9 +1,8 @@
 <p align="center"><img src="/attached_assets/cryptopayroll.png" width="480"\></p>
 
-# 💧 SuiAuditWarp 🌀
-**AI-Powered Smart Contract Audits for Move, Secured On-Chain with Sui + Cross-Chain Access via Wormhole**
+# 💧 AI-Powered Smart Contract Audits for Move, Secured On-Chain with Sui + Cross-Chain Access via Wormhole 🌀
+****
 
----
 
 ### 🚀 Live Demo / DApp Simulator
 
