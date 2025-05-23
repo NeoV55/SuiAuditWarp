@@ -1,4 +1,4 @@
-<p align="center"><img src="/attached_assets/cryptopayroll.png" width="480"\></p>
+<p align="center"><img src="/logo-text.png" width="480"\></p>
 
 ## AI-Powered Smart Contract Audits for Move, Secured On-Chain with Sui + Cross-Chain Access via Wormhole
 ****
