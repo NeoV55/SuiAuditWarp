@@ -1,19 +1,13 @@
 <p align="center"><img src="/attached_assets/cryptopayroll.png" width="480"\></p>
 
-# 💧 AI-Powered Smart Contract Audits for Move, Secured On-Chain with Sui + Cross-Chain Access via Wormhole 🌀
+## AI-Powered Smart Contract Audits for Move, Secured On-Chain with Sui + Cross-Chain Access via Wormhole
 ****
 
+## 🌀 Overview
 
-### 🚀 Live Demo / DApp Simulator
+**SuiAuditWarp** is a cross-chain, AI-powered auditing platform purpose-built for smart contracts on the Move language and the Sui blockchain. By leveraging advanced LLMs, decentralized storage (IPFS), and on-chain proof via Sui NFTs, SuiAuditWarp enables developers to audit their code in seconds and anchor verifiable results on-chain. With seamless cross-chain access enabled by Wormhole and no prior Sui expertise required, it's a powerful tool for securing DeFi, NFT, and multi-chain applications with speed, transparency, and trust.
 
-Check out the live demo here: [🔗 SuiAuditWarp DApp Simulator](https://audit-warp.vercel.app/)
-
----
-
-### 📄 Sui Deployment (Testnet)
-
-- **Sui NFT Contract Address (Testnet):** [`0x0d865f8b0ca4c353fbc142af6b74d88c4ec49d28c970b58c48b5599e1d314914`](https://testnet.suivision.xyz/package/0x0d865f8b0ca4c353fbc142af6b74d88c4ec49d28c970b58c48b5599e1d314914?tab=Code)  
-- **Deployer Address (Testnet):** [`0x768478578364d08dfc4e7c114a883602289256f0e603b64f58eb14ac288ab673`](https://testnet.suivision.xyz/account/0x768478578364d08dfc4e7c114a883602289256f0e603b64f58eb14ac288ab673)
+Check out the live dapp here: [💧 SuiAuditWarp ](https://audit-warp.vercel.app/)
 
 ---
 
@@ -49,6 +43,13 @@ Check out the live demo here: [🔗 SuiAuditWarp DApp Simulator](https://audit-w
 | `mintAuditNFT()`   | Mints NFT on Sui with audit metadata |
 | `wormholeBridge()` | Facilitates cross-chain access & token payments |
 | `connectWallet()`  | Initializes wallet connection (Sui or EVM) |
+
+---
+
+### 📄 Sui Deployment (Testnet)
+
+- **Sui NFT Contract Address (Testnet):** [`0x0d865f8b0ca4c353fbc142af6b74d88c4ec49d28c970b58c48b5599e1d314914`](https://testnet.suivision.xyz/package/0x0d865f8b0ca4c353fbc142af6b74d88c4ec49d28c970b58c48b5599e1d314914?tab=Code)  
+- **Deployer Address (Testnet):** [`0x768478578364d08dfc4e7c114a883602289256f0e603b64f58eb14ac288ab673`](https://testnet.suivision.xyz/account/0x768478578364d08dfc4e7c114a883602289256f0e603b64f58eb14ac288ab673)
 
 ---
 
