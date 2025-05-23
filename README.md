@@ -13,7 +13,7 @@ Check out the live demo here: [🔗 SuiAuditWarp DApp Simulator](https://audit-w
 
 ### 📄 Sui Deployment (Testnet)
 
-- **Sui Contract Address (Testnet):** [`0x0d865f8b0ca4c353fbc142af6b74d88c4ec49d28c970b58c48b5599e1d314914`](https://testnet.suivision.xyz/package/0x0d865f8b0ca4c353fbc142af6b74d88c4ec49d28c970b58c48b5599e1d314914?tab=Code)  
+- **Sui NFT Contract Address (Testnet):** [`0x0d865f8b0ca4c353fbc142af6b74d88c4ec49d28c970b58c48b5599e1d314914`](https://testnet.suivision.xyz/package/0x0d865f8b0ca4c353fbc142af6b74d88c4ec49d28c970b58c48b5599e1d314914?tab=Code)  
 - **Deployer Address (Testnet):** [`0x768478578364d08dfc4e7c114a883602289256f0e603b64f58eb14ac288ab673`](https://testnet.suivision.xyz/account/0x768478578364d08dfc4e7c114a883602289256f0e603b64f58eb14ac288ab673)
 
 ---
@@ -31,11 +31,11 @@ Check out the live demo here: [🔗 SuiAuditWarp DApp Simulator](https://audit-w
 ---
 
 - **Frontend**: Built with `React`, `Tailwind CSS`, `Radix UI`, `Viem`
-- **AI Engine**: Uses `OpenAI API` or 'Google Gemini' for LLM-based code analysis (pluggable AI api's for: 'deepseek' , 'Anthropics' and more )
-- **Storage**: Generates PDF reports → uploads to `IPFS` (via Pinata or Walrus)
-- **Proof**: Mints Sui NFTs containing audit metadata and IPFS hash
-- **Cross-chain Access**: Wormhole SDK enables EVM ↔ Sui communication
-- **Sui Code-Support**: Move Analyzer enables compiler support features for Move programming language
+- **AI Engine**: Uses `OpenAI API` or `Google Gemini` for LLM-based code analysis (pluggable AI api's for: `deepseek` , `Anthropics` and more )
+- **Storage**: Generates PDF reports → uploads to `IPFS` (via `Pinata` or `Walrus`)
+- **Proof**: Mints Sui NFTs containing audit metadata and `IPFS` hash
+- **Cross-chain Access**: `Wormhole` SDK enables EVM ↔ Sui communication
+- **Sui Code-Support**: `Move Analyzer` enables compiler support features for Move programming language
 - **Wallets Supported**: `DappKit` (Sui), `Web3-react` (EVM)
 
 ---
