@@ -1,0 +1,49 @@
+1. Warning: <a> cannot appear as a descendant of <a>
+What it means:
+React is warning that somewhere in your rendered output, an anchor (<a>) element is nested inside another <a> element. According to HTML standards, you shouldn’t nest clickable links because it can lead to unexpected behavior or accessibility issues.
+How to fix it:
+- Locate the Nested Links:
+Use the component stack trace—it mentions that the error appears around components in your Sidebar (and possibly in components rendered by Wouter). Check your Sidebar.tsx and any component that renders anchor elements.
+- Refactor the Markup:
+If you need to have clickable areas within a clickable link, consider:
+- Replacing the inner <a> with a semantic element that isn’t a link (like a <span>) and styling it like a link.
+- If the inner element truly needs to be a link, restructure your layout so that they are siblings instead of a parent-child relationship.
+For example, if you currently have:
+<a href="/some-route">
+  Outer Link
+  <a href="/nested-route">Nested Link</a>
+</a>
+
+
+Change it to something like:
+<div>
+  <a href="/some-route">Outer Link</a>
+  <a href="/nested-route">Nested Link</a>
+</div>
+
+
+Or if only one clickable area is needed, combine behaviors.
+
+2. Warning: Invalid prop data-replit-metadata supplied to React.Fragment
+What it means:
+React.Fragment is a special component that can only receive the key and children props. It does not support arbitrary props like data-replit-metadata. The warning indicates that somewhere in your code (or possibly via a tool like Replit’s internal tooling), extra props are being passed to a React.Fragment.
+How to fix it:
+- Check Where It’s Applied:
+The error trace mentions ProgressSteps (in your ProgressSteps.tsx). Look for any usage of React.Fragment (either explicitly via <React.Fragment> or shorthand <> … </>) where props are being spread or passed.
+- Remove or Filter the Prop:
+If you meant to add metadata, remove it from the fragment. For example, instead of:
+<React.Fragment data-replit-metadata="...">
+  {children}
+</React.Fragment>
+- Remove data-replit-metadata:
+<React.Fragment>
+  {children}
+</React.Fragment>
+- Or if the extra information is required for some reason, wrap your children in a <div> (which accepts arbitrary props):
+<div data-replit-metadata="...">
+  {children}
+</div>
+- Review Libraries/Tooling:
+Sometimes these properties might be injected by an external tool or Replit’s integration. If you’re not explicitly passing that attribute, you might check if your component props spreading is including extraneous fields. Filter out the unwanted prop before spreading.
+
+

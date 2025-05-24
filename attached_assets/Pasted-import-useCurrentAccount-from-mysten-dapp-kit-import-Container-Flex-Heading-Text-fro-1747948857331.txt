@@ -1,0 +1,194 @@
+import { useCurrentAccount } from "@mysten/dapp-kit";
+import { Container, Flex, Heading, Text } from "@radix-ui/themes";
+import { OwnedObjects } from "./OwnedObjects";
+
+export function WalletStatus() {
+  const account = useCurrentAccount();
+
+  return (
+    <Container my="2">
+      <Heading mb="2">Wallet Status</Heading>
+
+      {account ? (
+        <Flex direction="column">
+          <Text>Wallet connected</Text>
+          <Text>Address: {account.address}</Text>
+        </Flex>
+      ) : (
+        <Text>Wallet not connected</Text>
+      )}
+      <OwnedObjects />
+    </Container>
+  );
+}
+
+
+import React from "react";
+import { Flex, Button, Text } from "@radix-ui/themes";
+
+interface NetworkSwitcherProps {
+  currentNetwork: "testnet" | "mainnet";
+  setNetwork: (network: "testnet" | "mainnet") => void;
+}
+
+const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({
+  currentNetwork,
+  setNetwork,
+}) => {
+  return (
+    <Flex gap="2" align="center" justify="center" mt="4">
+      <Text>Current Network: {currentNetwork}</Text>
+      <Button onClick={() => setNetwork("testnet")}>Testnet</Button>
+      <Button onClick={() => setNetwork("mainnet")}>Mainnet</Button>
+    </Flex>
+  );
+};
+
+export default NetworkSwitcher;
+
+
+import { getFullnodeUrl } from "@mysten/sui/client";
+import {
+  DEVNET_COUNTER_PACKAGE_ID,
+  TESTNET_COUNTER_PACKAGE_ID,
+  MAINNET_COUNTER_PACKAGE_ID,
+} from "./constants.ts";
+import { createNetworkConfig } from "@mysten/dapp-kit";
+
+const { networkConfig, useNetworkVariable, useNetworkVariables } =
+  createNetworkConfig({
+    devnet: {
+      url: getFullnodeUrl("devnet"),
+      variables: {
+        nft: DEVNET_COUNTER_PACKAGE_ID,
+      },
+    },
+    testnet: {
+      url: getFullnodeUrl("testnet"),
+      variables: {
+        nft: TESTNET_COUNTER_PACKAGE_ID,
+      },
+    },
+    mainnet: {
+      url: getFullnodeUrl("mainnet"),
+      variables: {
+        nft: MAINNET_COUNTER_PACKAGE_ID,
+      },
+    },
+  });
+
+export { useNetworkVariable, useNetworkVariables, networkConfig };
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "@mysten/dapp-kit/dist/index.css";
+import "@radix-ui/themes/styles.css";
+
+import { SuiClientProvider, WalletProvider } from "@mysten/dapp-kit";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Theme } from "@radix-ui/themes";
+import App from "./App.tsx";
+import { networkConfig } from "./networkConfig.ts";
+
+
+const queryClient = new QueryClient();
+
+
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <Theme appearance="dark">
+      <QueryClientProvider client={queryClient}>
+        <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
+          <WalletProvider autoConnect>
+            <App />
+          </WalletProvider>
+        </SuiClientProvider>
+      </QueryClientProvider>
+    </Theme>
+  </React.StrictMode>,
+);
+
+
+// src/App.jsx
+import React, { useState } from "react";
+import { SuiClientProvider, ConnectButton } from "@mysten/dapp-kit";
+import { Box, Container, Flex, Heading, Button } from "@radix-ui/themes";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { WalletStatus } from "./WalletStatus";
+import AuditPage from "./AuditPage";
+import NFTList from "./NFTList";
+import WormholePage from "./wormhole";    // Your single‑file wormhole UI
+import NetworkSwitcher from "./NetworkSwitcher";
+
+const App: React.FC = () => {
+  const [network, setNetwork] = useState<"testnet" | "mainnet">("testnet");
+  const [page, setPage] = useState<"home" | "audit">("home");
+
+  return (
+    <SuiClientProvider
+      networks={{
+        testnet: { url: "https://fullnode.testnet.sui.io" },
+        mainnet: { url: "https://fullnode.mainnet.sui.io" },
+      }}
+      defaultNetwork={network}
+    >
+      {/* Header with Tabs */}
+      <Flex
+        position="sticky"
+        px="4"
+        py="2"
+        justify="between"
+        align="center"
+        style={{ borderBottom: "1px solid var(--gray-a2)" }}
+      >
+        <Box>
+          <Heading>AuditWarp</Heading>
+        </Box>
+
+        <Flex gap="2" align="center">
+          <Button
+            variant={page === "home" ? "solid" : "soft"}
+            onClick={() => setPage("home")}
+          >
+            Home
+          </Button>
+          <Button
+            variant={page === "audit" ? "solid" : "soft"}
+            onClick={() => setPage("audit")}
+          >
+            Audit
+          </Button>
+          <ConnectButton />
+        </Flex>
+      </Flex>
+
+      {/* Main Content */}
+      <Container>
+        <NetworkSwitcher currentNetwork={network} setNetwork={setNetwork} />
+        <Container
+          mt="5"
+          pt="2"
+          px="4"
+          style={{ background: "var(--gray-a2)", minHeight: 500 }}
+        >
+          {page === "home" ? (
+            <>
+              <WalletStatus />
+              <AuditPage />
+              <NFTList />
+            </>
+          ) : (
+            <WormholePage />
+          )}
+        </Container>
+      </Container>
+
+      <ToastContainer position="top-right" autoClose={5000} />
+    </SuiClientProvider>
+  );
+};
+
+export default App;

@@ -1,0 +1,319 @@
+Prompt: Sui-First Cross‑Chain Audit dApp with Automated NFT Certificate Generation
+This project—AuditWarp—is a frontend‑only, cross‑chain smart‑contract auditing dApp focused primarily on the Sui network. (EVM wallet connectivity is optional.) Users input their Move contract code (only Move contracts are supported), trigger an AI audit using Google Gemini, and generate a PDF audit report that is uploaded to IPFS. The final step automatically mints an NFT certificate onto the Sui blockchain using their connected Sui wallet. The auto-generated NFT metadata uses the prefix "AuditWarp" (e.g. NFT Name and Description) and uses the IPFS URL from the uploaded audit report. Gas fees are paid from the Sui wallet, and NFT minting happens via your pre‑deployed Move contract at:
+0x6120510bd943eda5a8334f627af50832896d99e31b888e0791005f62122a09e5
+
+
+Additionally, this prompt addresses the following issues you’ve encountered:
+- Asset Loading Error:
+Error loading the Sui logo (https://cryptologos.cc/logos/sui-sui-logo.png) with 403 (Forbidden).
+→ Solution: Either host this asset locally (or from a trusted source) to avoid same‑origin restrictions.
+- Controlled/Uncontrolled Dialog Warning:
+“Dialog is changing from uncontrolled to controlled”
+→ Solution: Ensure all controlled components (e.g. modal dialogs) initialize their state (e.g. open state set to false by default) so that they remain controlled throughout.
+- Google Gemini API 403 Error:
+“403 Permission denied” when calling the Gemini endpoint.
+→ Solution: Verify that your API key is valid, the service is enabled for your consumer, and proper environment variables are set.
+- Wormhole Bridge Transaction Error (500):
+“Failed to create bridge transaction”
+→ Solution: Double‑check your Wormhole configuration and API settings (this error might require additional debugging or contacting support on the Wormhole side).
+
+1. Project Overview
+- Primary Network: Sui (all dApp flows and NFT minting use Sui as the main blockchain)
+- Wallet Connectivity:
+- Sui wallet: Must work reliably via Mysten Dapp‑Kit so that when users click “Connect Sui Wallet,” they’re connected and the wallet address is auto‑fed into the app.
+- EVM wallet (MetaMask): Optional for bridging, but primary flows use Sui.
+- Audit Process:
+- Users input Move contract code (only Move is supported).
+- On clicking “Start Audit,” the app calls Google Gemini to analyze the contract.
+- The resulting audit report is then transformed into a PDF.
+→ PDF Fix: Pre‑process newline characters (or split into lines) so that pdf‑lib’s WinAnsi encoding does not error.
+- The PDF is uploaded to IPFS (via a Pinata client), and the returned URL is used in NFT metadata.
+- NFT Certificate:
+- Automatically generated NFT metadata:
+- Name: Auto‑generated as "AuditWarp: [generated name]"
+- Description: Auto‑generated as "AuditWarp: <detailed audit report summary>" with no manual input.
+- PDF URL: The IPFS URL from the audit report upload.
+- NFT minting uses the Move entry-point mint_to_sender from your deployed contract.
+
+2. File Structure
+On Replit, establish the following structure:
+AuditWarp/
+├─ package.json
+├─ vite.config.ts
+├─ .env
+├─ replit.nix
+└─ src/
+    ├─ main.tsx
+    ├─ App.tsx
+    ├─ AuditPage.tsx         // Move contract audit, AI call, PDF generation, IPFS upload
+    ├─ WormholePage.tsx      // (Optional) ETH bridging functionality
+    ├─ MintNFT.tsx           // NFT minting flow using auto-generated NFT metadata
+    ├─ WalletStatus.tsx      // Sui wallet connection (primary)
+    ├─ EvmWalletConnect.tsx  // Optional: EVM wallet connectivity via MetaMask
+    ├─ PDFViewer.tsx         // Inline PDF preview (optional)
+    ├─ constants.ts          // Contains NFT_PACKAGE_ID, etc.
+    ├─ networkConfig.ts      // SUI_NETWORKS configuration
+    └─ lib/
+        └─ pinataClient.ts   // Upload functions for IPFS
+
+
+
+3. Setup & Configuration
+A. package.json
+Create your package.json with dependencies:
+{
+  "name": "auditwarp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mysten/dapp-kit": "^1.0.0",
+    "@mysten/sui.js": "^1.0.0",
+    "ethers": "^5.7.2",
+    "@wormhole-foundation/sdk": "^1.0.0",
+    "@google/genai": "^1.0.0",
+    "pdf-lib": "^1.17.1",
+    "ipfs-http-client": "^56.0.3",
+    "@radix-ui/themes": "^1.0.0",
+    "react-toastify": "^9.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "wouter": "^2.7.5"
+  },
+  "devDependencies": {
+    "vite": "^4.0.0",
+    "typescript": "^4.9.0"
+  }
+}
+
+
+Replace versions if needed.
+B. .env
+Create a .env file in your project root with:
+VITE_SUI_PRIVATE_KEY_B64=your_base64_encoded_sui_private_key
+GEMINI_API_KEY=your_google_genai_api_key_here
+VITE_SUI_TESTNET_URL=https://fullnode.testnet.sui.io
+VITE_SUI_MAINNET_URL=https://fullnode.mainnet.sui.io
+
+
+Important: Ensure this file is not committed publicly.
+
+C. vite.config.ts
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [],
+  assetsInclude: ["**/*.wasm"]
+});
+
+
+D. replit.nix
+{ pkgs }:
+{
+  deps = [
+    pkgs.nodejs-18_x
+    pkgs.yarn
+  ];
+  run = "npm run dev";
+}
+
+
+E. networkConfig.ts
+// src/networkConfig.ts
+export const SUI_NETWORKS = {
+  testnet: process.env.VITE_SUI_TESTNET_URL || "https://fullnode.testnet.sui.io",
+  mainnet: process.env.VITE_SUI_MAINNET_URL || "https://fullnode.mainnet.sui.io"
+};
+
+
+F. constants.ts
+// src/constants.ts
+export const NFT_PACKAGE_ID = "0x6120510bd943eda5a8334f627af50832896d99e31b888e0791005f62122a09e5";
+
+
+
+4. Source Code Implementation
+A. Sui Wallet Connection & Controlled Dialog
+Create src/WalletStatus.tsx to manage Sui wallet connection using Mysten Dapp‑Kit, ensuring that any Dialog is controlled:
+// src/WalletStatus.tsx
+import React, { useState } from "react";
+import { useWallets } from "@mysten/dapp-kit";
+import * as Dialog from "@radix-ui/react-dialog";
+
+export const WalletStatus: React.FC = () => {
+  const wallets = useWallets();
+  const connectedWallet = wallets[0];
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false); // Always controlled
+
+  const handleOpenChange = (open: boolean) => {
+    setDialogOpen(open);
+  };
+
+  const handleConnect = async () => {
+    if (!connectedWallet) {
+      // Trigger wallet connection process if supported or just notify the user.
+      alert("Please install a Sui wallet extension and enable it.");
+    }
+  };
+
+  return (
+    <div>
+      {connectedWallet ? (
+        <div>
+          Connected Sui Wallet: {connectedWallet.getAddress().slice(0, 6)}...{connectedWallet.getAddress().slice(-4)}
+        </div>
+      ) : (
+        <Dialog.Root open={dialogOpen} onOpenChange={handleOpenChange}>
+          <Dialog.Trigger asChild>
+            <button onClick={handleConnect}>Connect Sui Wallet</button>
+          </Dialog.Trigger>
+          <Dialog.Portal>
+            <Dialog.Overlay style={{ backgroundColor: "rgba(0,0,0,0.5)" }} />
+            <Dialog.Content style={{ background: "white", padding: "20px", borderRadius: "8px" }}>
+              <Dialog.Title>Connect Your Sui Wallet</Dialog.Title>
+              <Dialog.Description>Please follow your wallet’s prompt to connect.</Dialog.Description>
+              <button onClick={() => setDialogOpen(false)}>Close</button>
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
+      )}
+    </div>
+  );
+};
+
+export default WalletStatus;
+
+
+B. Auto‑Generated NFT Minting (MintNFT.tsx)
+Create src/MintNFT.tsx to automatically mint an NFT using on‑chain data. The NFT name and description are auto‑generated. The IPFS URL (from the audit report) is provided by your storage process:
+// src/MintNFT.tsx
+import React from "react";
+import { TransactionBlock } from "@mysten/sui.js";
+import { useWallets, useSignAndExecuteTransaction } from "@mysten/dapp-kit";
+import { NFT_PACKAGE_ID } from "./constants";
+
+export const MintNFT: React.FC<{ reportUrl: string; generatedName?: string }> = ({ reportUrl, generatedName = "AuditReport" }) => {
+  const wallets = useWallets();
+  const connectedWallet = wallets[0];
+  const { mutateAsync: mintTx } = useSignAndExecuteTransaction({
+    execute: async ({ bytes, signature }) => {
+      // Execute the transaction using your Sui client here.
+      console.log("Transaction executed:", bytes);
+      return;
+    },
+  });
+
+  const handleMint = async () => {
+    if (!connectedWallet) {
+      alert("Connect your Sui wallet first.");
+      return;
+    }
+    try {
+      const tx = new TransactionBlock();
+      // Auto-generate NFT metadata. Prepend "AuditWarp" to the name and description.
+      const nftName = `AuditWarp: ${generatedName}`;
+      const nftDescription = `AuditWarp: ${generatedName} - Generated audit certificate.`;
+      tx.moveCall({
+        target: `${NFT_PACKAGE_ID}::nft::mint_to_sender`,
+        arguments: [tx.pure(nftName), tx.pure(nftDescription), tx.pure(reportUrl)]
+      });
+      await mintTx({ transaction: tx });
+      alert("NFT minted successfully to your Sui wallet!");
+    } catch (err) {
+      console.error("NFT Minting Error:", err);
+      alert("Failed to mint NFT.");
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={handleMint}>Mint NFT Certificate</button>
+    </div>
+  );
+};
+
+export default MintNFT;
+
+
+C. Main Application (App.tsx & main.tsx)
+Ensure your main app wraps everything using SuiClientProvider:
+// src/App.tsx
+import React from "react";
+import { SuiClientProvider } from "@mysten/dapp-kit";
+import { SUI_NETWORKS } from "./networkConfig";
+import WalletStatus from "./WalletStatus";
+import MintNFT from "./MintNFT";
+
+const App: React.FC = () => {
+  // Assume 'reportUrl' is generated from the audit process (and uploaded to IPFS)
+  const reportUrl = "https://gateway.pinata.cloud/ipfs/your_generated_cid";
+
+  return (
+    <SuiClientProvider networks={SUI_NETWORKS} defaultNetwork="testnet">
+      <div>
+        <h1>AuditWarp - Sui-First Audit DApp</h1>
+        {/* Sui Wallet Connection */}
+        <WalletStatus />
+        {/* Auto-mint NFT certificate using reportUrl */}
+        <MintNFT reportUrl={reportUrl} generatedName="YourMoveContractAudit" />
+      </div>
+    </SuiClientProvider>
+  );
+};
+
+export default App;
+
+
+And your entry point:
+// src/main.tsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+
+
+5. Handling Additional Errors & Considerations
+- Sui Logo Error (403 Forbidden):
+If you are using an external URL for the Sui logo (e.g. https://cryptologos.cc/logos/sui-sui-logo.png), it might be blocked due to same-origin policies.
+Solution: Download the image and serve it locally (e.g. place it in a public/ folder) and reference it with a relative URL such as /sui-logo.png.
+- Google Gemini 403 Error (Permission Denied):
+If you get a 403 when calling Google Gemini’s endpoint, double‑check your environment variable GEMINI_API_KEY and ensure that your API access is enabled for the consumer.
+Solution: Verify API key validity and quota usage; check console logs for detailed API response messages.
+- Wormhole Bridge 500 Error:
+The error “Failed to create bridge transaction” may indicate misconfiguration with your bridge API.
+Solution: For now, focus on Sui connectivity and NFT minting. You can later revisit cross‑chain bridging and debug using proper logging.
+
+6. Installation & Running on Replit
+- Install Dependencies:
+Open the Replit shell and run:
+npm install
+- Run the Development Server:
+Launch your app with:
+npm run dev
+- Your application should be available at the provided Replit URL.
+- Test Your Sui Wallet Connection & NFT Minting:
+- Click the “Connect Sui Wallet” button, ensuring the modal dialog appears in a controlled way.
+- Once connected, verify that the wallet’s address displays correctly.
+- Click “Mint NFT Certificate” to ensure the transaction is constructed and (simulated) submitted successfully.
+
+7. Final Summary
+Replit Build Prompt Summary:
+- Focus: Run the dApp under the Sui network (primary) with optional MetaMask support for EVM.
+- Flow: The user inputs their Move contract (audit supported only for Move contracts), triggers an AI audit, and a PDF report is generated (with newline characters fixed) and uploaded to IPFS. The Sui wallet is used as the primary connection and gas payer.
+- NFT Generation: NFT metadata is auto‑generated by pre‑pending "AuditWarp" to the NFT name and description, and the IPFS URL (audit report) is used directly.
+- Errors Addressed:
+- Local asset hosting for Sui logos to avoid 403 errors.
+- Controlled state management in dialogs to avoid warnings.
+- Reminders to verify API keys for Google Gemini to prevent 403 errors.
+- Note: Focus on Sui connection first; debugging Wormhole bridge issues can be postponed.
+By following these detailed steps, you will have a fully functional Sui wallet connection integrated via Mysten Dapp‑Kit and the ability to mint an NFT certificate automatically using auto‑generated metadata—all while ensuring the app runs primarily on the Sui network.

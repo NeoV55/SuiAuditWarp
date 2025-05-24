@@ -1,0 +1,48 @@
+Warning: Invalid prop &#x60;data-replit-metadata&#x60; supplied to &#x60;React.Fragment&#x60;. React.Fragment can only have &#x60;key&#x60; and &#x60;children&#x60; props.
+    at ProgressSteps (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/src/components/ProgressSteps.tsx:18:41)
+    at div
+    at div
+    at AuditPage (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/src/pages/AuditPage.tsx?t=1747672497694:51:37)
+    at component
+    at Route (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=cbe7b6ab:191:16)
+    at Switch (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=cbe7b6ab:247:17)
+    at main
+    at div
+    at Layout (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/src/components/Layout.tsx:24:34)
+    at Provider (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-7N5U5ZU6.js?v=cbe7b6ab:48:15)
+    at TooltipProvider (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=cbe7b6ab:844:5)
+    at QueryClientProvider (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-5V4IZIL5.js?v=cbe7b6ab:2881:3)
+    at App (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/src/App.tsx?t=1747672571737&v=yRQ_7AqkqyPplVe_G7J1d:33:22)
+    at QueryClientProvider (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-5V4IZIL5.js?v=cbe7b6ab:2881:3)
+Running simulated AI audit for demo
+Warning: Invalid prop &#x60;data-replit-metadata&#x60; supplied to &#x60;React.Fragment&#x60;. React.Fragment can only have &#x60;key&#x60; and &#x60;children&#x60; props.
+    at ProgressSteps (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/src/components/ProgressSteps.tsx:18:41)
+    at div
+    at div
+    at AuditPage (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/src/pages/AuditPage.tsx?t=1747672497694:51:37)
+    at component
+    at Route (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=cbe7b6ab:191:16)
+    at Switch (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=cbe7b6ab:247:17)
+    at main
+    at div
+    at Layout (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/src/components/Layout.tsx:24:34)
+    at Provider (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-7N5U5ZU6.js?v=cbe7b6ab:48:15)
+    at TooltipProvider (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=cbe7b6ab:844:5)
+    at QueryClientProvider (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-5V4IZIL5.js?v=cbe7b6ab:2881:3)
+    at App (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/src/App.tsx?t=1747672571737&v=yRQ_7AqkqyPplVe_G7J1d:33:22)
+    at QueryClientProvider (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-5V4IZIL5.js?v=cbe7b6ab:2881:3)
+PDF generation error: 
+Error {}
+
+Audit error: 
+Error {}
+message: "Failed to generate PDF report"
+stack: "Error: Failed to generate PDF report↵ at generatePDF (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/src/lib/pdfGenerator.ts:212:11)↵ at async handleStartAudit (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/src/pages/AuditPage.tsx?t=1747672497694:105:23)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+
+at t.value (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400

@@ -1,0 +1,117 @@
+Prompt: Add a Reliable Sui Wallet Connect Button
+1. Install Dependencies
+Make sure your project has the required packages. In your Replit shell, run:
+npm install @mysten/dapp-kit @mysten/sui.js @radix-ui/themes react-toastify
+
+
+2. Create the Wallet Connector Component
+Add a new file named WalletConnector.tsx in your src/ folder. Paste the following code:
+// src/WalletConnector.tsx
+import React from "react";
+import { ConnectButton } from "@mysten/dapp-kit";
+import { Button, Flex, Text, Box } from "@radix-ui/themes";
+
+// A simple wallet connector using ConnectButton's render props. This approach avoids additional state management
+// and prevents the "Dialog is changing from uncontrolled to controlled" warning.
+const WalletConnector: React.FC = () => {
+  return (
+    <Box py="2">
+      <Text size="2" weight="bold" mb="2">
+        Sui Wallet
+      </Text>
+      {/* Use the ConnectButton's render prop to handle connection logic */}
+      <ConnectButton>
+        {({ currentAccount, connect, disconnect }) => {
+          if (currentAccount) {
+            const address = currentAccount.address;
+            return (
+              <Flex direction="column" gap="2">
+                <Flex align="center" gap="1">
+                  <Text size="1" style={{ fontFamily: "monospace" }}>
+                    {address.slice(0, 6)}...{address.slice(-4)}
+                  </Text>
+                  <Box
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(address);
+                      } catch (err) {
+                        console.error("Failed to copy address:", err);
+                      }
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Text size="1">📋</Text>
+                  </Box>
+                </Flex>
+                <Button size="1" variant="soft" color="red" onClick={disconnect}>
+                  Disconnect
+                </Button>
+              </Flex>
+            );
+          }
+          return (
+            <Button size="1" variant="soft" onClick={connect}>
+              Connect Sui Wallet
+            </Button>
+          );
+        }}
+      </ConnectButton>
+    </Box>
+  );
+};
+
+export default WalletConnector;
+
+
+3. Integrate the Wallet Connector into Your App
+Open your main application component (for example, App.tsx) and import your new WalletConnector. Then include it in your layout. For instance:
+// src/App.tsx
+import React from "react";
+import WalletConnector from "./WalletConnector";
+import { SuiClientProvider, WalletProvider } from "@mysten/dapp-kit";
+import { SUI_NETWORKS } from "./networkConfig";
+import { Theme } from "@radix-ui/themes";
+
+function App() {
+  return (
+    <SuiClientProvider networks={SUI_NETWORKS} defaultNetwork="testnet">
+      <WalletProvider autoConnect={true}>
+        <Theme appearance="dark" accentColor="cyan">
+          <div style={{ padding: "20px" }}>
+            <h1>Sui Wallet Connect Demo</h1>
+            <WalletConnector />
+          </div>
+        </Theme>
+      </WalletProvider>
+    </SuiClientProvider>
+  );
+}
+
+export default App;
+
+
+Make sure your SUI_NETWORKS is set up (for example, in src/networkConfig.ts):
+// src/networkConfig.ts
+export const SUI_NETWORKS = {
+  testnet: {
+    url: "https://fullnode.testnet.sui.io",
+  },
+  mainnet: {
+    url: "https://fullnode.mainnet.sui.io",
+  },
+};
+
+
+4. Run Your Application
+- In the Replit Shell, run:
+npm run dev
+- Open the provided URL. You should see the “Sui Wallet” section with:
+- A “Connect Sui Wallet” button (when no wallet is connected).
+- Once connected (using your Sui wallet extension), it shows your partially masked wallet address with a clipboard icon and a working “Disconnect” button.
+5. Troubleshooting
+- Controlled/Uncontrolled Warning:
+By relying solely on the ConnectButton’s render props, we avoid managing our own modal state for connecting the wallet. This ensures the connect button never switches between controlled and uncontrolled states.
+- Wallet Connection Issue:
+If your wallet isn’t connecting, double‑check that your Sui wallet extension is installed and enabled and that your network configuration (especially the testnet URL) is correct.
+- Clipboard Issues:
+Click the clipboard icon to copy your address. Check your browser’s console for errors if it fails.

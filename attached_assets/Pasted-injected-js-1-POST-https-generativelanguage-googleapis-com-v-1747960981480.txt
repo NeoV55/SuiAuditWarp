@@ -1,0 +1,142 @@
+injected.js:1 
+            
+            
+           POST https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent 403 (Forbidden)
+value @ injected.js:1
+makeRequest @ @google_generative-ai.js?v=f00af1b2:194
+makeModelRequest @ @google_generative-ai.js?v=f00af1b2:189
+await in makeModelRequest
+generateContent @ @google_generative-ai.js?v=f00af1b2:544
+generateContent @ @google_generative-ai.js?v=f00af1b2:899
+runAudit @ ai.ts:54
+handleStartAudit @ AuditPage.tsx:105
+callCallback2 @ chunk-276SZO74.js?v=f00af1b2:3674
+invokeGuardedCallbackDev @ chunk-276SZO74.js?v=f00af1b2:3699
+invokeGuardedCallback @ chunk-276SZO74.js?v=f00af1b2:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-276SZO74.js?v=f00af1b2:3736
+executeDispatch @ chunk-276SZO74.js?v=f00af1b2:7014
+processDispatchQueueItemsInOrder @ chunk-276SZO74.js?v=f00af1b2:7034
+processDispatchQueue @ chunk-276SZO74.js?v=f00af1b2:7043
+dispatchEventsForPlugins @ chunk-276SZO74.js?v=f00af1b2:7051
+(anonymous) @ chunk-276SZO74.js?v=f00af1b2:7174
+batchedUpdates$1 @ chunk-276SZO74.js?v=f00af1b2:18913
+batchedUpdates @ chunk-276SZO74.js?v=f00af1b2:3579
+dispatchEventForPluginEventSystem @ chunk-276SZO74.js?v=f00af1b2:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-276SZO74.js?v=f00af1b2:5478
+dispatchEvent @ chunk-276SZO74.js?v=f00af1b2:5472
+dispatchDiscreteEvent @ chunk-276SZO74.js?v=f00af1b2:5449
+ai.ts:60 AI audit error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [403 ] Permission denied: Consumer 'api_key:AIzaSyBprxc6wW4EBlBmduBbpczOGDVFuvbePnM' has been suspended. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"CONSUMER_SUSPENDED","domain":"googleapis.com","metadata":{"consumer":"projects/868519666780","service":"generativelanguage.googleapis.com","containerInfo":"api_key:AIzaSyBprxc6wW4EBlBmduBbpczOGDVFuvbePnM"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Permission denied: Consumer 'api_key:AIzaSyBprxc6wW4EBlBmduBbpczOGDVFuvbePnM' has been suspended."}]
+    at handleResponseNotOk (@google_generative-ai.js?v=f00af1b2:226:9)
+    at async makeRequest (@google_generative-ai.js?v=f00af1b2:199:5)
+    at async generateContent (@google_generative-ai.js?v=f00af1b2:544:20)
+    at async runAudit (ai.ts:54:20)
+    at async handleStartAudit (AuditPage.tsx:105:27)
+runAudit @ ai.ts:60
+await in runAudit
+handleStartAudit @ AuditPage.tsx:105
+callCallback2 @ chunk-276SZO74.js?v=f00af1b2:3674
+invokeGuardedCallbackDev @ chunk-276SZO74.js?v=f00af1b2:3699
+invokeGuardedCallback @ chunk-276SZO74.js?v=f00af1b2:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-276SZO74.js?v=f00af1b2:3736
+executeDispatch @ chunk-276SZO74.js?v=f00af1b2:7014
+processDispatchQueueItemsInOrder @ chunk-276SZO74.js?v=f00af1b2:7034
+processDispatchQueue @ chunk-276SZO74.js?v=f00af1b2:7043
+dispatchEventsForPlugins @ chunk-276SZO74.js?v=f00af1b2:7051
+(anonymous) @ chunk-276SZO74.js?v=f00af1b2:7174
+batchedUpdates$1 @ chunk-276SZO74.js?v=f00af1b2:18913
+batchedUpdates @ chunk-276SZO74.js?v=f00af1b2:3579
+dispatchEventForPluginEventSystem @ chunk-276SZO74.js?v=f00af1b2:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-276SZO74.js?v=f00af1b2:5478
+dispatchEvent @ chunk-276SZO74.js?v=f00af1b2:5472
+dispatchDiscreteEvent @ chunk-276SZO74.js?v=f00af1b2:5449
+AuditPage.tsx:80 Audit report saved to database: {id: 24, userId: 1, contractName: 'hello_blockchain', contractCode: 'module hello_blockchain::message {\n    use std::er…ain"),\n            ENO_MESSAGE\n        );\n    }\n}', blockchain: 'Sui', …}auditResult: "## Smart Contract Audit Error: API Key Issue\n\n**Error:** The Gemini API key appears to be invalid or has insufficient permissions.\n\n### What you can do:\n1. Make sure the VITE_GEMINI_API_KEY environment variable contains a valid API key from Google AI Studio\n2. Ensure the API key has been properly activated and has the necessary permissions\n3. Check if there are any rate limiting issues with your current API key\n\nFor testing purposes, you can proceed with a demo audit report instead."blockchain: "Sui"contractCode: "module hello_blockchain::message {\n    use std::error;\n    use std::signer;\n    use std::string;\n    use aptos_framework::event;\n\n    //:!:>resource\n    struct MessageHolder has key {\n        message: string::String,\n    }\n    //<:!:resource\n\n    #[event]\n    struct MessageChange has drop, store {\n        account: address,\n        from_message: string::String,\n        to_message: string::String,\n    }\n\n    /// There is no message present\n    const ENO_MESSAGE: u64 = 0;\n\n    #[view]\n    public fun get_message(addr: address): string::String acquires MessageHolder {\n        assert!(exists<MessageHolder>(addr), error::not_found(ENO_MESSAGE));\n        borrow_global<MessageHolder>(addr).message\n    }\n\n    public entry fun set_message(account: signer, message: string::String)\n    acquires MessageHolder {\n        let account_addr = signer::address_of(&account);\n        if (!exists<MessageHolder>(account_addr)) {\n            move_to(&account, MessageHolder {\n                message,\n            })\n        } else {\n            let old_message_holder = borrow_global_mut<MessageHolder>(account_addr);\n            let from_message = old_message_holder.message;\n            event::emit(MessageChange {\n                account: account_addr,\n                from_message,\n                to_message: copy message,\n            });\n            old_message_holder.message = message;\n        }\n    }\n\n    #[test(account = @0x1)]\n    public entry fun sender_can_set_message(account: signer) acquires MessageHolder {\n        let addr = signer::address_of(&account);\n        aptos_framework::account::create_account_for_test(addr);\n        set_message(account, string::utf8(b\"Hello, Blockchain\"));\n\n        assert!(\n            get_message(addr) == string::utf8(b\"Hello, Blockchain\"),\n            ENO_MESSAGE\n        );\n    }\n}"contractName: "hello_blockchain"createdAt: "2025-05-23T00:41:38.579Z"id: 24ipfsHash: "QmVn6dm33FncnkkFz3wKDsFt5j9rjy7pThMRjWRLoj79yx"pdfUrl: "https://ipfs.io/ipfs/QmVn6dm33FncnkkFz3wKDsFt5j9rjy7pThMRjWRLoj79yx"userId: 1vulnerabilityScore: 5[[Prototype]]: Object
+ai.ts:18 Running AI audit with Google Gemini for Move smart contract
+injected.js:1 
+            
+            
+           POST https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent 403 (Forbidden)
+value @ injected.js:1
+makeRequest @ @google_generative-ai.js?v=f00af1b2:194
+makeModelRequest @ @google_generative-ai.js?v=f00af1b2:189
+await in makeModelRequest
+generateContent @ @google_generative-ai.js?v=f00af1b2:544
+generateContent @ @google_generative-ai.js?v=f00af1b2:899
+runAudit @ ai.ts:54
+handleStartAudit @ AuditPage.tsx:105
+callCallback2 @ chunk-276SZO74.js?v=f00af1b2:3674
+invokeGuardedCallbackDev @ chunk-276SZO74.js?v=f00af1b2:3699
+invokeGuardedCallback @ chunk-276SZO74.js?v=f00af1b2:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-276SZO74.js?v=f00af1b2:3736
+executeDispatch @ chunk-276SZO74.js?v=f00af1b2:7014
+processDispatchQueueItemsInOrder @ chunk-276SZO74.js?v=f00af1b2:7034
+processDispatchQueue @ chunk-276SZO74.js?v=f00af1b2:7043
+dispatchEventsForPlugins @ chunk-276SZO74.js?v=f00af1b2:7051
+(anonymous) @ chunk-276SZO74.js?v=f00af1b2:7174
+batchedUpdates$1 @ chunk-276SZO74.js?v=f00af1b2:18913
+batchedUpdates @ chunk-276SZO74.js?v=f00af1b2:3579
+dispatchEventForPluginEventSystem @ chunk-276SZO74.js?v=f00af1b2:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-276SZO74.js?v=f00af1b2:5478
+dispatchEvent @ chunk-276SZO74.js?v=f00af1b2:5472
+dispatchDiscreteEvent @ chunk-276SZO74.js?v=f00af1b2:5449
+ai.ts:60 AI audit error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [403 ] Permission denied: Consumer 'api_key:AIzaSyBprxc6wW4EBlBmduBbpczOGDVFuvbePnM' has been suspended. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"CONSUMER_SUSPENDED","domain":"googleapis.com","metadata":{"containerInfo":"api_key:AIzaSyBprxc6wW4EBlBmduBbpczOGDVFuvbePnM","service":"generativelanguage.googleapis.com","consumer":"projects/868519666780"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Permission denied: Consumer 'api_key:AIzaSyBprxc6wW4EBlBmduBbpczOGDVFuvbePnM' has been suspended."}]
+    at handleResponseNotOk (@google_generative-ai.js?v=f00af1b2:226:9)
+    at async makeRequest (@google_generative-ai.js?v=f00af1b2:199:5)
+    at async generateContent (@google_generative-ai.js?v=f00af1b2:544:20)
+    at async runAudit (ai.ts:54:20)
+    at async handleStartAudit (AuditPage.tsx:105:27)
+runAudit @ ai.ts:60
+await in runAudit
+handleStartAudit @ AuditPage.tsx:105
+callCallback2 @ chunk-276SZO74.js?v=f00af1b2:3674
+invokeGuardedCallbackDev @ chunk-276SZO74.js?v=f00af1b2:3699
+invokeGuardedCallback @ chunk-276SZO74.js?v=f00af1b2:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-276SZO74.js?v=f00af1b2:3736
+executeDispatch @ chunk-276SZO74.js?v=f00af1b2:7014
+processDispatchQueueItemsInOrder @ chunk-276SZO74.js?v=f00af1b2:7034
+processDispatchQueue @ chunk-276SZO74.js?v=f00af1b2:7043
+dispatchEventsForPlugins @ chunk-276SZO74.js?v=f00af1b2:7051
+(anonymous) @ chunk-276SZO74.js?v=f00af1b2:7174
+batchedUpdates$1 @ chunk-276SZO74.js?v=f00af1b2:18913
+batchedUpdates @ chunk-276SZO74.js?v=f00af1b2:3579
+dispatchEventForPluginEventSystem @ chunk-276SZO74.js?v=f00af1b2:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-276SZO74.js?v=f00af1b2:5478
+dispatchEvent @ chunk-276SZO74.js?v=f00af1b2:5472
+dispatchDiscreteEvent @ chunk-276SZO74.js?v=f00af1b2:5449
+AuditPage.tsx:80 Audit report saved to database: {id: 25, userId: 1, contractName: 'hello_blockchain', contractCode: 'module hello_blockchain::message {\n    use std::er…ain"),\n            ENO_MESSAGE\n        );\n    }\n}', blockchain: 'Sui', …}
+wormhole.ts:34 Mocking bridge transfer from 0x71C7656EC7ab88b098defB751B7401B5f6d8976F to 0x81f92e33055e91bd0d339ddcc138b45e4199dfb375640dd99e80a1de438ba026 for 0.01 ETH
+wormhole.ts:35 IPFS hash: QmXAjEq2qNzumtdeYQ3iautSjLvWc1Bgx5ma7Sy1sMCQnR
+wormhole.ts:49 Transaction confirmed, emitting VAA
+injected.js:1 
+            
+            
+           POST https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/api/bridge-transactions 500 (Internal Server Error)
+value @ injected.js:1
+apiRequest @ queryClient.ts:14
+mutationFn @ WormholePage.tsx:78
+fn @ chunk-5V4IZIL5.js?v=f00af1b2:1203
+run @ chunk-5V4IZIL5.js?v=f00af1b2:500
+start @ chunk-5V4IZIL5.js?v=f00af1b2:542
+execute @ chunk-5V4IZIL5.js?v=f00af1b2:1239
+await in execute
+mutate @ chunk-5V4IZIL5.js?v=f00af1b2:2655
+(anonymous) @ chunk-5V4IZIL5.js?v=f00af1b2:3371
+handleBridgeTokens @ WormholePage.tsx:153
+await in handleBridgeTokens
+callCallback2 @ chunk-276SZO74.js?v=f00af1b2:3674
+invokeGuardedCallbackDev @ chunk-276SZO74.js?v=f00af1b2:3699
+invokeGuardedCallback @ chunk-276SZO74.js?v=f00af1b2:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-276SZO74.js?v=f00af1b2:3736
+executeDispatch @ chunk-276SZO74.js?v=f00af1b2:7014
+processDispatchQueueItemsInOrder @ chunk-276SZO74.js?v=f00af1b2:7034
+processDispatchQueue @ chunk-276SZO74.js?v=f00af1b2:7043
+dispatchEventsForPlugins @ chunk-276SZO74.js?v=f00af1b2:7051
+(anonymous) @ chunk-276SZO74.js?v=f00af1b2:7174
+batchedUpdates$1 @ chunk-276SZO74.js?v=f00af1b2:18913
+batchedUpdates @ chunk-276SZO74.js?v=f00af1b2:3579
+dispatchEventForPluginEventSystem @ chunk-276SZO74.js?v=f00af1b2:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-276SZO74.js?v=f00af1b2:5478
+dispatchEvent @ chunk-276SZO74.js?v=f00af1b2:5472
+dispatchDiscreteEvent @ chunk-276SZO74.js?v=f00af1b2:5449
+WormholePage.tsx:94 Failed to save bridge transaction: Error: 500: {"error":"Failed to create bridge transaction"}
+    at throwIfResNotOk (queryClient.ts:6:11)
+    at async apiRequest (queryClient.ts:19:3)

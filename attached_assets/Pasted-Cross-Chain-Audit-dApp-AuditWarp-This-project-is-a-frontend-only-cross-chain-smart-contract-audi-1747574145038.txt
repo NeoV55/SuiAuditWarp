@@ -1,0 +1,216 @@
+Cross‑Chain Audit dApp (AuditWarp)
+This project is a frontend‑only, cross‑chain smart‑contract auditing dApp that uses AI (via Google Gemini), PDF generation, decentralized storage, Wormhole cross‑chain bridging, and Sui on‑chain NFT minting. The NFT on Sui is minted using a pre‑deployed Move contract detailed below.
+
+1. Project Overview
+- Functionality:
+– The dApp accepts smart‑contract code as input and uses an AI audit (via Google Gemini) to generate a detailed audit report.
+– A PDF report is generated from the audit, then stored on decentralized storage (via Walrus or IPFS).
+– In parallel, the system locks a small amount of ETH (default 0.01) via Wormhole’s token bridge, which emits a Verified Action Approval (VAA) to the Sui chain.
+– A listener on Sui picks up the VAA, triggering the minting of an NFT that certifies the audit.
+– The NFT is minted using your deployed Sui contract under package ID
+0x6120510bd943eda5a8334f627af50832896d99e31b888e0791005f62122a09e5.
+- Key Technologies:
+– React + TypeScript + Vite
+– @mysten/dapp-kit & @mysten/sui.js for Sui wallet and transaction flows
+– ethers.js + MetaMask for Ethereum interactions
+– Wormhole SDK (EVM & Sui platforms) for cross‑chain bridging
+– @google/genai for AI audit (Google Gemini API)
+– pdf‑lib (or jsPDF) for PDF generation
+– ipfs‑http-client (or Walrus SDK) for decentralized storage
+– Radix UI Themes and react‑toastify for UI/notifications
+- NFT Contract:
+The Move contract (“nft_minting_contract::nft”) is already deployed on Sui at the address:
+0x6120510bd943eda5a8334f627af50832896d99e31b888e0791005f62122a09e5
+This contract exposes an entry function mint_to_sender(name: string, description: string, url: string, ctx) which mints an NFT and transfers it to the caller.
+
+2. File Structure
+Recreate the following file tree in your Replit project:
+AuditWarp/
+├─ package.json
+├─ vite.config.ts
+├─ .env
+├─ replit.nix
+└─ src/
+   ├─ main.tsx
+   ├─ App.tsx
+   ├─ AuditPage.tsx
+   ├─ WormholePage.tsx
+   ├─ MintNFT.tsx
+   ├─ NFTList.tsx
+   ├─ WalletStatus.tsx
+   ├─ NetworkSwitcher.tsx
+   ├─ PDFViewer.tsx
+   ├─ OwnedObjects.tsx
+   ├─ constants.ts
+   ├─ networkConfig.ts
+   └─ lib/
+       └─ pinataClient.ts
+
+
+
+3. Setup & Configuration
+A. package.json
+Create a package.json file with the following (ensure you pin versions as needed):
+{
+  "name": "auditwarp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mysten/dapp-kit": "^VERSION",
+    "@mysten/sui.js": "^VERSION",
+    "ethers": "^5.7.2",
+    "@wormhole-foundation/sdk": "^VERSION",
+    "@google/genai": "^VERSION",
+    "pdf-lib": "^1.17.1",
+    "ipfs-http-client": "^56.0.3",
+    "@radix-ui/themes": "^1.0.0",
+    "react-toastify": "^9.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "vite": "^4.0.0",
+    "typescript": "^4.9.0"
+  }
+}
+
+
+Replace ^VERSION with the actual version numbers you want to pin.
+B. .env
+Create a .env file in your project root with the following contents:
+VITE_SUI_PRIVATE_KEY_B64=your_base64_encoded_sui_private_key
+GEMINI_API_KEY=your_google_genai_api_key_here
+VITE_SUI_TESTNET_URL=https://fullnode.testnet.sui.io
+VITE_SUI_MAINNET_URL=https://fullnode.mainnet.sui.io
+
+
+Important: Do not commit your .env file to any public repository.
+
+C. vite.config.ts
+Create or update your vite.config.ts file. If you previously used a static copy plugin for WASM files (for Walrus), remove it if no external WASM is needed. Use:
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [],
+  assetsInclude: ["**/*.wasm"]
+});
+
+
+D. replit.nix
+To ensure the Replit environment has the proper Node.js version, create a replit.nix file with:
+{ pkgs }:
+{
+  deps = [
+    pkgs.nodejs-18_x
+    pkgs.yarn
+  ];
+  run = "npm run dev";
+}
+
+
+
+4. Source Code Integration
+A. Frontend
+- src/main.tsx:
+Set up the entry point that renders your React <App /> component.
+- src/App.tsx:
+Wrap your entire application with <SuiClientProvider> using your network configurations (from networkConfig.ts), and route between components such as <AuditPage /> and <WormholePage />.
+- src/AuditPage.tsx:
+This component:
+- Accepts file uploads and/or smart‑contract code as input.
+- Invokes an audit function that uses Google Gemini (via @google/genai) to produce a security audit.
+- Generates a PDF report using pdf‑lib or jsPDF.
+- Uploads the report to IPFS (using your Pinata client from lib/pinataClient.ts).
+- src/WormholePage.tsx:
+This component manages the cross‑chain flow:
+- Accepts contract code, user Sui address, and ETH amount.
+- Locks ETH on the Ethereum testnet via Wormhole’s token bridge and publishes a generic audit message.
+- (In the listener, on Sui, it waits for the VAA, then triggers regeneration of the PDF and NFT minting.)
+- src/MintNFT.tsx & src/NFTList.tsx:
+Provide UI for minting NFTs (by calling the Move function mint_to_sender) and listing the minted NFTs.
+Communicate with the deployed nft_minting_contract using Mysten Dapp‑Kit and Sui transaction flows.
+- src/networkConfig.ts:
+Export your network configuration:
+export const SUI_NETWORKS = {
+  testnet: process.env.VITE_SUI_TESTNET_URL,
+  mainnet: process.env.VITE_SUI_MAINNET_URL,
+};
+- src/constants.ts:
+Include constant values such as your NFT Package ID:
+export const NFT_PACKAGE_ID = "0x6120510bd943eda5a8334f627af50832896d99e31b888e0791005f62122a09e5";
+- src/lib/pinataClient.ts:
+Implement a simple client that uses ipfs-http-client or the Pinata API to upload files.
+B. Smart Contract Integration (Sui NFT Minting)
+Your deployed Sui NFT contract is defined as follows (this is for reference; the contract is already deployed):
+module nft_minting_contract::nft {
+    // ... (rest of the contract as provided)
+    public entry fun mint_to_sender(
+        name: string::String,
+        description: string::String,
+        url: string::String,
+        ctx: &mut TxContext,
+    ) {
+      // Minting logic and public_transfer
+    }
+    // Other entry functions...
+}
+
+
+The frontend must call the mint_to_sender function via a Move call in a transaction block. In your component (for example, in WormholePage or MintNFT.tsx), you might write:
+import { TransactionBlock } from "@mysten/sui.js"; // use the relevant import from sui.js
+import { NFT_PACKAGE_ID } from "./constants";
+
+// ... within your function:
+const tx = new TransactionBlock();
+tx.moveCall({
+  target: `${NFT_PACKAGE_ID}::nft::mint_to_sender`,
+  arguments: [
+    tx.pure("Audit Report"),      // Name
+    tx.pure("Wormhole Audit"),      // Description
+    tx.pure(url)                    // URL of the stored PDF (IPFS or Walrus)
+  ]
+});
+await mintTx({ transaction: tx });
+
+
+Make sure your wallet connection and signing is properly set up using Mysten’s dapp-kit.
+C. AI Audit Integration
+Replace OpenAI calls with the Google Gemini API using the @google/genai library. For example, in your audit function:
+import { GoogleGenerativeAI } from "@google/genai";
+
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+
+async function callAIAudit(contractCode: string): Promise<string> {
+  const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  const prompt = `You are an expert blockchain auditor. Analyze the following smart contract code for vulnerabilities and logic errors. Provide a detailed report with a summary of risks, detailed findings, and recommendations.
+
+Contract Code:
+${contractCode}
+
+Respond with clear sections: Summary, Detailed Findings, and Recommendations.`;
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  return response.text();
+}
+
+
+
+5. Installation & Running
+- Install Dependencies:
+Open the Replit shell and run:
+npm install
+- Run the Development Server:
+Start the project with:
+npm run dev
+- Your application will run on the Replit-provided URL (e.g., https://your-project.repl.co).
+- Testing:
+- Verify that the AuditPage can accept code input, call the Gemini API, generate a PDF, and upload it to IPFS (or Walrus).
+- Check that WormholePage locks ETH via MetaMask, emits the correct VAAs, and that on the Sui side the NFT is minted using the deployed NFT contract.
+- Use Replit’s console and Network tab for troubleshooting any errors (e.g., WASM MIME issues, blockchain transaction failures, or API call errors).

@@ -1,0 +1,218 @@
+AuditWarp – Cross‑Chain Audit dApp with Custom NFT Certificate
+This project is a frontend‑only, cross‑chain smart‑contract auditing dApp that leverages AI (via Google Gemini), PDF generation, decentralized storage, Wormhole cross‑chain bridging, and Sui on‑chain NFT minting. In addition, the NFT certificate is fully customizable with a creative audit stamp (e.g. “Certified by AuditWarp”) that appears on the certificate design.
+Your task is to rebuild AuditWarp from scratch on Replit with an engaging, creative user interface and enhanced NFT customization.
+
+1. Project Overview
+- Core Functionality:
+- Users input smart‑contract code.
+- An AI audit is performed using Google Gemini (via the @google/genai API), generating a detailed report.
+- A PDF report is created from the audit and stored in decentralized storage (IPFS via Pinata or on‑chain via Walrus).
+- A small ETH fee is locked through Wormhole’s token bridge on Ethereum.
+- A Sui listener picks up the VAA and triggers minting of a customized NFT certificate.
+- The NFT certificate displays the audit details along with a unique “Certified by AuditWarp” stamp that can be customized.
+- Key Technologies:
+- Frontend: React, TypeScript, Vite
+- Blockchain: MetaMask + ethers.js (Ethereum), Mysten Dapp‑Kit & @mysten/sui.js (Sui)
+- Cross‑Chain Bridging: Wormhole SDK (EVM & Sui platforms)
+- AI: @google/genai (Google Gemini API)
+- PDF Generation: pdf‑lib (or jsPDF)
+- Storage: ipfs‑http-client for IPFS/Pinata or Walrus SDK for on‑chain storage
+- UI Enhancements: Radix UI Themes, react‑toastify, and creative CSS/SVG artwork for the certificate “stamp”
+- NFT Certificate Customization:
+- The NFT certificate’s metadata includes a URL pointing to the stored PDF.
+- Your minting transaction calls the deployed Move contract (package ID:
+0x6120510bd943eda5a8334f627af50832896d99e31b888e0791005f62122a09e5) using the function mint_to_sender().
+- The certificate will be customized by merging audit data (name, description) with a unique audit stamp—a graphical “stamp” (created with SVG or a styled image) indicating “Certified by AuditWarp”. This stamp can be dynamically composed (for instance, overlayed onto the PDF before storage or included in the NFT metadata as a dedicated field).
+
+2. File Structure
+On Replit, structure your project as follows:
+AuditWarp/
+├─ package.json
+├─ vite.config.ts
+├─ .env
+├─ replit.nix
+└─ src/
+   ├─ main.tsx
+   ├─ App.tsx
+   ├─ AuditPage.tsx           // For code input, AI audit, PDF generation, IPFS upload
+   ├─ WormholePage.tsx        // For cross-chain ETH locking & VAA emission; NFT certificate minting
+   ├─ MintNFT.tsx             // Additional interface to re-mint/edit if needed
+   ├─ NFTList.tsx             // Displays minted NFTs
+   ├─ WalletStatus.tsx        // Sui wallet connectivity and balance display
+   ├─ NetworkSwitcher.tsx     // Switching between testnets/mainnet
+   ├─ PDFViewer.tsx           // Inline PDF preview component
+   ├─ OwnedObjects.tsx        // Query Sui for user-owned NFT objects
+   ├─ constants.ts            // Contains NFT contract package ID and other constants
+   ├─ networkConfig.ts        // Sui and EVM endpoint configuration
+   └─ lib/
+       └─ pinataClient.ts     // Client code for interacting with Pinata/IPFS
+
+
+
+3. Setup & Environment Configuration
+A. package.json
+Create a package.json with all the dependencies. Example:
+{
+  "name": "auditwarp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mysten/dapp-kit": "^1.0.0",
+    "@mysten/sui.js": "^1.0.0",
+    "ethers": "^5.7.2",
+    "@wormhole-foundation/sdk": "^1.0.0",
+    "@google/genai": "^1.0.0",
+    "pdf-lib": "^1.17.1",
+    "ipfs-http-client": "^56.0.3",
+    "@radix-ui/themes": "^1.0.0",
+    "react-toastify": "^9.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "wouter": "^2.7.5"
+  },
+  "devDependencies": {
+    "vite": "^4.0.0",
+    "typescript": "^4.9.0"
+  }
+}
+
+
+Adjust the version numbers as necessary.
+B. .env
+Create a .env file in the project root with:
+VITE_SUI_PRIVATE_KEY_B64=your_base64_encoded_sui_private_key
+GEMINI_API_KEY=your_google_genai_api_key_here
+VITE_SUI_TESTNET_URL=https://fullnode.testnet.sui.io
+VITE_SUI_MAINNET_URL=https://fullnode.mainnet.sui.io
+
+
+C. vite.config.ts
+Set up Vite for a React/TypeScript environment:
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [],
+  assetsInclude: ["**/*.wasm"]
+});
+
+
+D. replit.nix
+Add a replit.nix file to ensure proper system-level dependencies:
+{ pkgs }:
+{
+  deps = [
+    pkgs.nodejs-18_x
+    pkgs.yarn
+  ];
+  run = "npm run dev";
+}
+
+
+
+4. Source Code Overview & Integration
+A. Frontend Components
+- src/main.tsx:
+Initialize React and render <App />.
+- src/App.tsx:
+Wrap with <SuiClientProvider> using networks defined in networkConfig.ts and render routing components using your router (e.g., using Wouter).
+- src/AuditPage.tsx:
+- Provide a large textarea or file input for smart‑contract code.
+- Call an audit function that uses Google Gemini (see “AI Audit Integration” below).
+- Generate a PDF using pdf‑lib and display a preview (using PDFViewer).
+- Upload the PDF to decentralized storage via Pinata (or Walrus) and display the link.
+- src/WormholePage.tsx:
+- Accept user input for contract code, Sui wallet address, and ETH amount.
+- Use ethers.js with MetaMask to lock 0.01 ETH via Wormhole’s token transfer.
+- Publish an audit message (VAA) from Ethereum using the Wormhole SDK.
+- When a VAA is received on Sui, trigger NFT minting.
+- Creative NFT Certificate Customization:
+In your NFT minting flow, incorporate an extra step to add a “stamp” image or SVG stamp (e.g., “Certified by AuditWarp”) to the certificate’s design or metadata. This can be done by either:
+- Overlaying an SVG stamp on the PDF before storage, or
+- Including a dedicated field in the NFT metadata URL that points to a styled certificate (for example, using a templated HTML/SVG that shows the stamp).
+- Use a customizable component or configuration so that the stamp text, color, and style can be adjusted.
+- src/MintNFT.tsx & src/NFTList.tsx:
+These components allow users to manually mint new NFTs or view their minted audit certificates. They interact with Sui via Mysten Dapp‑Kit.
+- src/WalletStatus.tsx & src/NetworkSwitcher.tsx:
+Provide wallet connection status and allow switching between Sui testnet and mainnet.
+- src/constants.ts:
+Add:
+export const NFT_PACKAGE_ID = "0x6120510bd943eda5a8334f627af50832896d99e31b888e0791005f62122a09e5";
+
+
+- src/networkConfig.ts:
+Define SUI network URLs by reading from environment variables:
+export const SUI_NETWORKS = {
+  testnet: process.env.VITE_SUI_TESTNET_URL,
+  mainnet: process.env.VITE_SUI_MAINNET_URL,
+};
+B. AI Audit Integration (Google Gemini)Replace your OpenAI integration with the Gemini API:import { GoogleGenerativeAI } from "@google/genai";
+
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+
+async function callAIAudit(contractCode: string): Promise<string> {
+  const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  const prompt = `
+    You are an expert blockchain auditor. Analyze the following smart contract code for vulnerabilities and logic errors.
+    
+    Contract Code:
+    ${contractCode}
+    
+    Provide a detailed audit report with:
+      - Summary of Risks
+      - Detailed Findings
+      - Recommendations
+      
+    Also, include a creative certification statement: "Certified by AuditWarp" as a stamp for the NFT certificate.
+  `;
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  return response.text();
+}
+C. NFT Minting & Creative CertificateWhen minting the NFT from the Sui side (for example in WormholePage or MintNFT.tsx), construct a transaction that calls your Move function:import { TransactionBlock } from "@mysten/sui.js";
+import { NFT_PACKAGE_ID } from "./constants";
+
+// In your NFT mint function:
+const tx = new TransactionBlock();
+tx.moveCall({
+  target: `${NFT_PACKAGE_ID}::nft::mint_to_sender`,
+  arguments: [
+    tx.pure("Audit Report Certificate"),             // NFT Name
+    tx.pure("This certificate is issued after a thorough audit. Certified by AuditWarp."), // Description including the certification stamp text.
+    tx.pure(reportUrl)                                 // URL to the stored PDF (with potential overlay of a stamp or separate metadata image)
+  ]
+});
+await mintTx({ transaction: tx });
+You can further customize the certificate by dynamically composing the description or appending styling (for instance, using HTML to embed an SVG stamp and later converting that to an image that gets stored).5. Installation & Running- Install Dependencies: In the Replit shell, run:
+npm install
+
+
+- Run Development Server: Start your project with:
+npm run dev
+
+
+- Your project will be available at your Replit preview URL.
+- Testing:
+- Test the AuditPage to ensure the AI audit works, the PDF is generated with a creative look, and the storage (IPFS/Walrus) returns a valid URL.
+- Test the WormholePage to check ETH locking via MetaMask, VAA emissions, and successful NFT minting. Verify the NFT certificate displays the audit stamp (“Certified by AuditWarp”) as designed.
+- Use Replit’s console and developer tools (Network tab, console logs) to debug any issues (e.g. DOM nesting warnings, WASM loading, etc.).
+6. Final SummaryReplit Creative Build Steps:- Initialize a New Replit Project:
+Choose a Node.js or Vite/React template. Name your project “AuditWarp”.
+- Recreate the Project Structure:
+Build the tree structure as outlined above. Add files for main.tsx, App.tsx, AuditPage.tsx, WormholePage.tsx, MintNFT.tsx, NFTList.tsx, and other supporting components.
+- Configure Project Files:
+- Copy the provided package.json, .env, vite.config.ts, and replit.nix files.
+- Configure environment variables for the Sui private key and Gemini API key.
+- Implement Source Code:
+- Build the frontend components with creative design elements (use Radix UI Themes and custom CSS to create an engaging UI).
+- Integrate the AI audit using @google/genai.
+- Implement PDF generation and storage (IPFS/Pinata or Walrus).
+- Set up cross‑chain bridging using the Wormhole SDK.
+- Integrate NFT minting with a creative certificate—ensuring the final NFT includes a customizable stamp (e.g. "Certified by AuditWarp").
+- Install, Run & Test:
+Run npm install then npm run dev and verify all flows. Make adjustments based on testing outcomes.

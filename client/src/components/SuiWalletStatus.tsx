@@ -1,0 +1,115 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { truncateAddress } from "@/lib/utils";
+import { Copy, Check } from "lucide-react";
+import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
+
+export default function SuiWalletStatus() {
+  const [copied, setCopied] = useState(false);
+  const currentAccount = useCurrentAccount();
+
+  // Determine if we're connected
+  const connected = !!currentAccount;
+  const address = currentAccount?.address || null;
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy address: ", err);
+    }
+  };
+
+  return (
+    <div className="p-4 border-b border-dark-800">
+      <h3 className="text-xs font-semibold text-gray-400 uppercase mb-3">
+        Wallet Connections
+      </h3>
+
+      {/* Sui Wallet */}
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center">
+            {/* Use local image to avoid 403 errors */}
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 512 512"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="rounded-full mr-2"
+            >
+              <path
+                d="M256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0Z"
+                fill="#6BBEFF"
+              />
+              <path
+                d="M256 50C369.7 50 462 142.3 462 256C462 369.7 369.7 462 256 462C142.3 462 50 369.7 50 256C50 142.3 142.3 50 256 50Z"
+                fill="#4BA3EF"
+              />
+              <path
+                d="M135 312.1L256 193.1L376 312.1L256 129.1L135 312.1Z"
+                fill="white"
+              />
+              <path
+                d="M256 356.9L175 276.9L256 236.9L336 276.9L256 356.9Z"
+                fill="white"
+              />
+            </svg>
+            <span className="text-sm font-medium">Sui</span>
+          </div>
+
+          {connected ? (
+            <span className="px-2 py-1 text-xs rounded-full bg-dark-800 text-green-400 font-medium">
+              Connected
+            </span>
+          ) : (
+            <div className="text-xs text-gray-400">
+              <ConnectButton className="text-xs text-gray-400 bg-dark-800 hover:bg-dark-700 px-3 py-1 rounded-md hover:text-white">
+                Connect Sui Wallet
+              </ConnectButton>
+            </div>
+          )}
+        </div>
+
+        {connected && address && (
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center">
+              <span className="text-xs font-mono text-gray-400">
+                {truncateAddress(address, 6, 4)}
+              </span>
+              <button
+                className="ml-2 text-xs text-gray-400 hover:text-white"
+                onClick={() => copyToClipboard(address)}
+              >
+                {copied ? (
+                  <Check className="h-3 w-3" />
+                ) : (
+                  <Copy className="h-3 w-3" />
+                )}
+              </button>
+            </div>
+
+            <ConnectButton>
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs text-gray-400 hover:text-red-400 mt-2"
+              >
+                Disconnect
+              </Button>
+            </ConnectButton>
+
+            <div className="flex items-center mt-2">
+              <div className="text-xs text-gray-400 rounded-md p-1 bg-dark-700">
+                <span className="font-medium">Certified by AuditWarp</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

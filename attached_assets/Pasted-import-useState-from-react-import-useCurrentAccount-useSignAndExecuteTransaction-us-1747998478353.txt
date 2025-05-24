@@ -1,0 +1,154 @@
+import { useState } from "react";
+import {
+  useCurrentAccount,
+  useSignAndExecuteTransaction,
+  useSuiClient,
+} from "@mysten/dapp-kit";
+import { Transaction } from "@mysten/sui/transactions"; // Correct import!
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { NFT_PACKAGE_ID } from "../constants";
+import { ClipLoader } from "react-spinners";
+
+interface SuiNFTMintingProps {
+  reportUrl: string;
+  contractName: string;
+  disabled?: boolean;
+}
+
+export default function SuiNFTMinting({
+  reportUrl,
+  contractName,
+  disabled = false,
+}: SuiNFTMintingProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [mintTxResponse, setMintTxResponse] = useState<any>(null);
+  const [mintError, setMintError] = useState<string>("");
+
+  const currentAccount = useCurrentAccount();
+  console.log("Current account:", currentAccount);
+  // Debug: Check if currentAccount.signTransactionBlock exists
+  if (currentAccount) {
+    console.log(
+      "Wallet signTransactionBlock:",
+      currentAccount.signTransactionBlock,
+    );
+  }
+
+  const suiClient = useSuiClient();
+  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+  const { toast } = useToast();
+
+  const handleMintNFT = async () => {
+    console.log("handleMintNFT called");
+    if (!currentAccount) {
+      console.error("No wallet connected");
+      toast({
+        title: "Wallet Error",
+        description: "Please connect your Sui wallet first",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!reportUrl) {
+      console.error("No report URL provided");
+      toast({
+        title: "Error",
+        description: "No report URL available to mint NFT",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      console.log("Creating transaction block for NFT minting.");
+      toast({
+        title: "Info",
+        description: "Initiating NFT minting...",
+      });
+
+      // Create a new transaction block.
+      const tx = new Transaction();
+      console.log("Transaction block created:", tx);
+
+      tx.moveCall({
+        target: `${NFT_PACKAGE_ID}::nft::mint_to_sender`,
+        arguments: [
+          tx.pure.string(`AuditWarp: ${contractName} Certificate`),
+          tx.pure.string(
+            `AuditWarp: Smart contract audit certificate for ${contractName}`,
+          ),
+          tx.pure.string(reportUrl),
+        ],
+        typeArguments: [],
+      });
+      console.log("Transaction block after moveCall:", tx);
+
+      signAndExecuteTransaction(
+        { transaction: tx },
+        {
+          onSuccess: (result) => {
+            console.log("Transaction succeeded:", result);
+            setMintTxResponse(result);
+            toast({
+              title: "Success!",
+              description: "NFT Certificate minted successfully!",
+            });
+            setIsLoading(false);
+          },
+          onError: (error: any) => {
+            const msg = error.message || "Failed to mint NFT";
+            console.error("Transaction error:", error);
+            setMintError(msg);
+            toast({
+              title: "Error",
+              description: msg,
+              variant: "destructive",
+            });
+            setIsLoading(false);
+          },
+        },
+      );
+    } catch (error: any) {
+      console.error("Error in handleMintNFT try block:", error);
+      toast({
+        title: "Transaction Error",
+        description: "Failed to prepare NFT minting transaction",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <Button
+        onClick={handleMintNFT}
+        disabled={disabled || isLoading || !currentAccount}
+        className="w-full mt-4"
+      >
+        {isLoading ? (
+          <div className="flex items-center justify-center">
+            <ClipLoader size={20} color="white" className="mr-2" />
+            Minting...
+          </div>
+        ) : (
+          "Mint NFT Certificate"
+        )}
+      </Button>
+      {mintTxResponse && (
+        <div className="mt-2 text-sm text-gray-400">
+          Transaction Response:
+          <pre className="mt-1 p-2 bg-gray-800 rounded overflow-auto">
+            {JSON.stringify(mintTxResponse, null, 2)}
+          </pre>
+        </div>
+      )}
+      {mintError && (
+        <div className="mt-2 text-sm text-red-500">Error: {mintError}</div>
+      )}
+    </>
+  );
+}

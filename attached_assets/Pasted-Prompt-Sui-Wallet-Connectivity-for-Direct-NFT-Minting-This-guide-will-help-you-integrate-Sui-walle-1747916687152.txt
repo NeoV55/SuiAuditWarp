@@ -1,0 +1,194 @@
+Prompt: Sui Wallet Connectivity for Direct NFT Minting
+This guide will help you integrate Sui wallet connectivity so that the user can connect their Sui wallet and have NFT minting sent directly to that wallet. We use Mysten Dapp‑Kit and @mysten/sui.js for blockchain integration.
+1. Overview
+- Goal:
+Enable Sui wallet connection so that when a user clicks “Mint NFT,” the app uses the connected wallet to sign a transaction that mints an NFT certificate directly to that address.
+- Technologies Used:
+- React + TypeScript + Vite for the frontend
+- @mysten/dapp-kit for Sui wallet connection and hooks
+- @mysten/sui.js for transaction building and execution
+- NFT Minting Contract:
+Your deployed Move contract (package ID:
+0x6120510bd943eda5a8334f627af50832896d99e31b888e0791005f62122a09e5) exposes an entry function mint_to_sender(…) that mints an NFT and transfers it to the caller. The NFT metadata (name, description, and URL) will include a creative “Certified by AuditWarp” stamp.
+
+2. Required File Structure (Relevant Parts)
+Ensure your project includes these essential files in the src/ directory:
+src/
+├─ main.tsx
+├─ App.tsx
+├─ WalletStatus.tsx       // Sui wallet connection display & connect button
+├─ MintNFT.tsx            // NFT minting functionality using the connected wallet
+├─ constants.ts           // Contains NFT_PACKAGE_ID and other constants
+└─ networkConfig.ts       // Contains SUI_NETWORKS config
+
+
+
+3. Configuration Files
+A. .env
+Define your environment variables (make sure to add this file to your .gitignore):
+VITE_SUI_PRIVATE_KEY_B64=your_base64_encoded_sui_private_key
+VITE_SUI_TESTNET_URL=https://fullnode.testnet.sui.io
+VITE_SUI_MAINNET_URL=https://fullnode.mainnet.sui.io
+
+
+B. networkConfig.ts
+Create or update src/networkConfig.ts:
+export const SUI_NETWORKS = {
+  testnet: process.env.VITE_SUI_TESTNET_URL || "https://fullnode.testnet.sui.io",
+  mainnet: process.env.VITE_SUI_MAINNET_URL || "https://fullnode.mainnet.sui.io",
+};
+
+
+C. constants.ts
+Create or update src/constants.ts:
+export const NFT_PACKAGE_ID = "0x6120510bd943eda5a8334f627af50832896d99e31b888e0791005f62122a09e5";
+
+
+
+4. Implementing Sui Wallet Connectivity
+A. Sui Wallet Status Component (WalletStatus.tsx)
+Create src/WalletStatus.tsx to handle wallet connection display and provide a basic “Connect Sui Wallet” button:
+// src/WalletStatus.tsx
+import React from "react";
+import { useWallets } from "@mysten/dapp-kit";
+
+export const WalletStatus: React.FC = () => {
+  const wallets = useWallets();
+  const connectedWallet = wallets[0];
+
+  // If no wallet is connected, this button can trigger a modal or connection flow
+  // (Check your dapp-kit documentation – some setups require an explicit call)
+  const handleConnect = async () => {
+    if (!connectedWallet) {
+      // You may need to call a connect function provided by your dapp-kit provider.
+      // This is a placeholder—you might instead invoke a modal or another UI prompt.
+      alert("Please ensure your Sui wallet extension is installed and enabled.");
+    }
+  };
+
+  return (
+    <div>
+      {connectedWallet ? (
+        <div>
+          Connected Sui Wallet:{" "}
+          {connectedWallet.getAddress().slice(0, 6)}...{connectedWallet.getAddress().slice(-4)}
+        </div>
+      ) : (
+        <button onClick={handleConnect}>Connect Sui Wallet</button>
+      )}
+    </div>
+  );
+};
+
+export default WalletStatus;
+
+
+B. NFT Minting Component (MintNFT.tsx)
+Create src/MintNFT.tsx to mint an NFT directly to the connected Sui wallet:
+// src/MintNFT.tsx
+import React from "react";
+import { TransactionBlock } from "@mysten/sui.js"; 
+import { useWallets, useSignAndExecuteTransaction } from "@mysten/dapp-kit";
+import { NFT_PACKAGE_ID } from "./constants";
+
+export const MintNFT: React.FC = () => {
+  const wallets = useWallets();
+  const connectedWallet = wallets[0];
+  // useSignAndExecuteTransaction wraps signing and sending Sui transactions.
+  const { mutateAsync: mintTx } = useSignAndExecuteTransaction({
+    execute: async ({ bytes, signature }) => {
+      // Assumes that your SuiClient is provided through SuiClientProvider
+      // Here you should call your Sui client's executeTransaction method.
+      // Example: await suiClient.executeTransaction({ transaction: bytes, signature });
+      console.log("Transaction Bytes:", bytes);
+      return;
+    },
+  });
+
+  const handleMint = async () => {
+    if (!connectedWallet) {
+      alert("Please connect your Sui wallet first.");
+      return;
+    }
+
+    try {
+      const tx = new TransactionBlock();
+      // Customize NFT parameters. You can later expand to include a dynamic audit stamp.
+      tx.moveCall({
+        target: `${NFT_PACKAGE_ID}::nft::mint_to_sender`,
+        arguments: [
+          tx.pure("Audit Report Certificate"), // NFT Name
+          tx.pure("This certificate is issued after a thorough audit. Certified by AuditWarp."), // Description including stamp
+          tx.pure("https://your-storage-url.example.com/certificate.pdf") // URL to the stored PDF
+        ],
+      });
+      await mintTx({ transaction: tx });
+      alert("NFT minted successfully to your connected Sui wallet!");
+    } catch (err) {
+      console.error("NFT Minting Error:", err);
+      alert("Failed to mint NFT. Check console for details.");
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={handleMint}>Mint NFT Certificate</button>
+    </div>
+  );
+};
+
+export default MintNFT;
+
+
+
+5. Integrate Wallet Components into Your App
+Update your main app layout (e.g., in src/App.tsx) to include both wallet components:
+// src/App.tsx
+import React from "react";
+import { SuiClientProvider } from "@mysten/dapp-kit";
+import { SUI_NETWORKS } from "./networkConfig";
+import WalletStatus from "./WalletStatus";
+import EvmWalletConnect from "./EvmWalletConnect"; // if needed for MetaMask
+import MintNFT from "./MintNFT";
+
+const App: React.FC = () => {
+  return (
+    <SuiClientProvider networks={SUI_NETWORKS} defaultNetwork="testnet">
+      <div>
+        <h1>AuditWarp - NFT Minting Demo</h1>
+        {/* Display wallet connection status */}
+        <WalletStatus />
+        {/* Optional: Add EVM wallet connect if you need both */}
+        {/* <EvmWalletConnect /> */}
+        {/* NFT Minting Section */}
+        <MintNFT />
+      </div>
+    </SuiClientProvider>
+  );
+};
+
+export default App;
+
+
+Ensure that your project is wrapped in a <SuiClientProvider> to allow proper integration of Sui wallet hooks.
+
+6. Installation & Running on Replit
+- Install Dependencies:
+Open the Replit shell and run:
+npm install
+- Run the Development Server:
+Launch your app with:
+npm run dev
+- Your application will run at your Replit-provided URL.
+- Test the Sui Wallet Connection & NFT Minting:
+- Click the "Connect Sui Wallet" button to ensure your wallet connection displays the connected wallet address.
+- Next, click the "Mint NFT Certificate" button to simulate minting an NFT directly to your Sui wallet.
+- Check the console output (and any alerts) for any errors or success messages.
+
+7. Final Summary
+By following this prompt, you will:
+- Integrate Sui wallet connectivity using Mysten Dapp‑Kit.
+- Display the connected Sui wallet address in your UI.
+- Implement a MintNFT component that constructs and sends a Move transaction to call the mint_to_sender function of your deployed Sui NFT contract.
+- Test the process in your Replit environment so that an NFT certificate (including your certification stamp) is minted directly to the connected Sui wallet.
+This should ensure that your Sui wallet functionality is working correctly for NFT minting in AuditWarp.

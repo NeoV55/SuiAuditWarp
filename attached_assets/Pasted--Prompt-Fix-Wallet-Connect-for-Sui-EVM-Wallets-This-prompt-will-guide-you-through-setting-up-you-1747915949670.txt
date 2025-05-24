@@ -1,0 +1,158 @@
+ Prompt: Fix Wallet Connect for Sui & EVM Wallets
+This prompt will guide you through setting up your Replit project to ensure that both Sui wallet and EVM wallet (MetaMask) connections work correctly. We’ll cover:
+- Sui Wallet Connection using Mysten Dapp‑Kit
+- EVM Wallet Connection using ethers.js with MetaMask
+
+1. Sui Wallet Connection
+Requirements:
+- Use the Mysten Dapp‑Kit that exposes hooks like useWallets and useSuiClient to manage Sui wallet connectivity.
+- Render a button if no wallet is connected.
+- Display the connected wallet address once connected.
+Sample Implementation (WalletStatus.tsx):
+Create or update src/WalletStatus.tsx with the following code:
+// src/WalletStatus.tsx
+import React from "react";
+import { useWallets } from "@mysten/dapp-kit";
+
+export const WalletStatus: React.FC = () => {
+  const wallets = useWallets();
+  const connectedWallet = wallets[0];
+
+  const handleConnect = async () => {
+    if (wallets.length === 0) {
+      // Most dapp-kit setups open a modal or initiate connection here.
+      // In some cases, you might use an embedded connect button (check your dapp-kit docs).
+      console.error("No SUI wallet available. Please install a Sui wallet extension.");
+    }
+  };
+
+  return (
+    <div>
+      {connectedWallet ? (
+        <div>
+          Connected Sui Wallet: {connectedWallet.getAddress().slice(0, 6)}...{connectedWallet.getAddress().slice(-4)}
+        </div>
+      ) : (
+        <button onClick={handleConnect}>Connect Sui Wallet</button>
+      )}
+    </div>
+  );
+};
+
+export default WalletStatus;
+
+
+Configuration Hints:
+- Ensure that your SuiClientProvider is correctly set up (see your App.tsx) so that useWallets() returns the wallet list.
+- Verify that the Sui wallet extension is installed in your browser (or use the testing interface provided by Mysten Dapp‑Kit).
+
+2. EVM Wallet Connection
+Requirements:
+- Use window.ethereum injected by MetaMask.
+- Use ethers.js’ BrowserProvider to request accounts and create a signer.
+- Display the connected EVM wallet address in your UI.
+Sample Implementation (EvmWalletConnect.tsx):
+Create or update src/EvmWalletConnect.tsx with the following code:
+// src/EvmWalletConnect.tsx
+import React, { useState } from "react";
+import { ethers } from "ethers";
+
+export const EvmWalletConnect: React.FC = () => {
+  const [address, setAddress] = useState<string | null>(null);
+
+  // Helper to connect EVM wallet using MetaMask (window.ethereum)
+  const connectEvmWallet = async () => {
+    if (!(window as any).ethereum) {
+      console.error("MetaMask not found. Please install MetaMask.");
+      alert("MetaMask not detected!");
+      return;
+    }
+    try {
+      // Initialize BrowserProvider (using ethers v6 method – adjust if you use v5)
+      const provider = new ethers.BrowserProvider((window as any).ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = await provider.getSigner();
+      const addr = await signer.getAddress();
+      setAddress(addr);
+      console.log("Connected EVM wallet:", addr);
+    } catch (err) {
+      console.error("Failed to connect EVM wallet:", err);
+    }
+  };
+
+  return (
+    <div>
+      {address ? (
+        <div>
+          Connected EVM Wallet: {address.slice(0, 6)}...{address.slice(-4)}
+        </div>
+      ) : (
+        <button onClick={connectEvmWallet}>Connect MetaMask</button>
+      )}
+    </div>
+  );
+};
+
+export default EvmWalletConnect;
+
+
+Configuration Hints:
+- Verify that MetaMask is installed and enabled in your browser.
+- Ensure that you’re using the correct ethers.js version. The above example uses the newer ethers.BrowserProvider API (available in ethers v6). If you use ethers v5 then use new ethers.providers.Web3Provider(window.ethereum).
+
+3. Integrating Wallet Connect Components into Your App
+To manage both wallet connections, update your main layout (e.g. in src/App.tsx) with both components:
+// src/App.tsx
+import React from "react";
+import { SuiClientProvider } from "@mysten/dapp-kit";
+import { WalletStatus } from "./WalletStatus";
+import EvmWalletConnect from "./EvmWalletConnect";
+import { SUI_NETWORKS } from "./networkConfig";
+
+const App: React.FC = () => {
+  return (
+    <SuiClientProvider networks={SUI_NETWORKS} defaultNetwork="testnet">
+      <div>
+        <h1>AuditWarp - Cross-Chain Audit dApp</h1>
+        <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
+          <WalletStatus />
+          <EvmWalletConnect />
+        </div>
+        {/* Other components/Routes go here */}
+      </div>
+    </SuiClientProvider>
+  );
+};
+
+export default App;
+
+
+Be sure that your network configuration (src/networkConfig.ts) is defined:
+// src/networkConfig.ts
+export const SUI_NETWORKS = {
+  testnet: process.env.VITE_SUI_TESTNET_URL || "https://fullnode.testnet.sui.io",
+  mainnet: process.env.VITE_SUI_MAINNET_URL || "https://fullnode.mainnet.sui.io",
+};
+
+
+
+4. Installation & Running on Replit
+- Install Dependencies:
+In the Replit shell, run:
+npm install
+- Run Development Server:
+Launch the development server with:
+npm run dev
+- Your application will be served on the Replit URL.
+- Testing the Wallet Connect:
+- Click the "Connect Sui Wallet" button and verify that Mysten Dapp‑Kit returns a wallet address.
+- Click the "Connect MetaMask" button and confirm that MetaMask (via ethers.js) returns an account address.
+- Use the browser console to check for any connection error messages.
+
+5. Final Summary
+By following this prompt:
+- You will have separate, working wallet connection components for both Sui and EVM wallets.
+- Sui wallet connectivity is managed by Mysten Dapp‑Kit hooks.
+- EVM wallet connectivity is established via MetaMask with ethers.js.
+- Both components are integrated into your main App component, ensuring that users can connect to each blockchain as needed.
+This structure will help ensure that your Replit project reliably connects to users’ wallets on both chains, allowing your cross‑chain audit flows to access wallet addresses and sign transactions as required.

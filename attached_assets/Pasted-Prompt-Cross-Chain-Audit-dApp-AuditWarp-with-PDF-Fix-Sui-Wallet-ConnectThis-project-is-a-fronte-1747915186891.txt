@@ -1,0 +1,206 @@
+Prompt: Cross‑Chain Audit dApp (AuditWarp) with PDF Fix & Sui Wallet ConnectThis project is a frontend‑only, cross‑chain smart‑contract auditing dApp. It leverages AI auditing (via Google Gemini), generates a PDF report from the audit (using pdf‑lib), stores the PDF in decentralized storage, locks ETH via Wormhole’s token bridge, and mints an NFT certificate on Sui (using Mysten Dapp‑Kit). The NFT certificate is customized with a “Certified by AuditWarp” stamp.We’ve encountered a PDF generation error:Error: WinAnsi cannot encode "\n" (0x000a)This is due to newline characters in the audit report text. To fix this, the audit text will be pre‑processed by replacing newline characters with spaces or by splitting the text into lines and drawing each line separately.Additionally, we’ll integrate wallet connection using Mysten Dapp‑Kit for Sui.1. Project Overview- Main Flow:
+- User inputs smart‑contract code.
+- The app calls the Gemini API (via @google/genai) to generate a detailed audit report.
+- A PDF is generated from the audit report using pdf‑lib.
+→ PDF Fix: Pre-process the text to remove or handle newline characters.
+- The PDF is stored via IPFS (via Pinata client) or on‑chain via Walrus.
+- Meanwhile, 0.01 ETH is locked on Ethereum via the Wormhole SDK.
+- The Sui listener picks up the Wormhole VAA and triggers NFT certificate minting on Sui.
+- The NFT certificate is minted with a creative, customizable audit stamp (e.g. “Certified by AuditWarp”).
+- Key Technologies:
+- Frontend: React, TypeScript, Vite
+- Blockchain Interactions: ethers.js/MetaMask (Ethereum), Mysten Dapp‑Kit & @mysten/sui.js (Sui)
+- Cross‑Chain Bridging: Wormhole SDK
+- AI Audit: @google/genai (Google Gemini)
+- PDF Generation: pdf‑lib
+- Decentralized Storage: ipfs‑http-client (Pinata) or Walrus SDK
+- UI: Radix UI Themes, react‑toastify
+- NFT Contract:
+Your Move NFT contract is already deployed on Sui with package ID:
+0x6120510bd943eda5a8334f627af50832896d99e31b888e0791005f62122a09e5
+It exposes an entry mint_to_sender(...) for minting NFT certificates.
+2. File StructureRecreate the following structure in your Replit project:AuditWarp/
+├─ package.json
+├─ vite.config.ts
+├─ .env
+├─ replit.nix
+└─ src/
+    ├─ main.tsx
+    ├─ App.tsx
+    ├─ AuditPage.tsx         // Code input, audit, PDF generation, storage
+    ├─ WormholePage.tsx      // ETH lock, VAA emission, NFT minting
+    ├─ MintNFT.tsx           // (Optional) Additional NFT minting interface
+    ├─ NFTList.tsx           // Display minted NFTs
+    ├─ WalletStatus.tsx      // Sui wallet connection and balance display
+    ├─ NetworkSwitcher.tsx   // Sui network (testnet/mainnet) switcher
+    ├─ PDFViewer.tsx         // Inline PDF preview
+    ├─ OwnedObjects.tsx      // List Sui objects (e.g., minted NFTs)
+    ├─ constants.ts          // Contains NFT_PACKAGE_ID and other constants
+    ├─ networkConfig.ts      // Sui and EVM endpoints configuration
+    └─ lib/
+        └─ pinataClient.ts   // Client for uploading PDF to Pinata/IPFS
+3. Setup & ConfigurationA. package.jsonCreate your package.json with dependencies:{
+  "name": "auditwarp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mysten/dapp-kit": "^1.0.0",
+    "@mysten/sui.js": "^1.0.0",
+    "ethers": "^5.7.2",
+    "@wormhole-foundation/sdk": "^1.0.0",
+    "@google/genai": "^1.0.0",
+    "pdf-lib": "^1.17.1",
+    "ipfs-http-client": "^56.0.3",
+    "@radix-ui/themes": "^1.0.0",
+    "react-toastify": "^9.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "wouter": "^2.7.5"
+  },
+  "devDependencies": {
+    "vite": "^4.0.0",
+    "typescript": "^4.9.0"
+  }
+}
+Pin version numbers as needed.B. .envVITE_SUI_PRIVATE_KEY_B64=your_base64_encoded_sui_private_key
+GEMINI_API_KEY=your_google_genai_api_key_here
+VITE_SUI_TESTNET_URL=https://fullnode.testnet.sui.io
+VITE_SUI_MAINNET_URL=https://fullnode.mainnet.sui.io
+C. vite.config.tsimport { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [],
+  assetsInclude: ["**/*.wasm"]
+});
+D. replit.nix{ pkgs }:
+{
+  deps = [
+    pkgs.nodejs-18_x
+    pkgs.yarn
+  ];
+  run = "npm run dev";
+}
+4. Source Code Highlights & FixesA. Fixing PDF Generation (pdf-lib)In your PDF generation helper (e.g. src/pdfGenerator.ts), apply a pre‑processing step to remove or replace newline characters. For example:import { PDFDocument, StandardFonts } from "pdf-lib";
+
+export async function generatePDF(auditReport: string): Promise<Uint8Array> {
+  try {
+    // Option 1: Simply replace newline characters with a space:
+    const safeText = auditReport.replace(/\n/g, " ");
+
+    // Option 2: Alternatively, if you need multiline output, split the text and draw each line:
+    // const lines = auditReport.split("\n");
+
+    const pdfDoc = await PDFDocument.create();
+    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+    const page = pdfDoc.addPage([600, 400]);
+
+    // Draw text on the PDF. Using safeText without newline characters prevents the encoding error.
+    page.drawText(safeText, {
+      x: 10,
+      y: 380,
+      size: 12,
+      font: helveticaFont,
+      maxWidth: 580,
+      lineHeight: 14,
+    });
+
+    const pdfBytes = await pdfDoc.save();
+    return pdfBytes;
+  } catch (err) {
+    console.error("PDF generation error:", err);
+    throw new Error("Failed to generate PDF report");
+  }
+}
+This change ensures that no newline (\n) characters cause encoding issues.B. Sui Wallet ConnectionUsing Mysten Dapp‑Kit, add wallet connection functionality. For example, in your WalletStatus.tsx:import React from "react";
+import { useWallets } from "@mysten/dapp-kit";
+
+export const WalletStatus: React.FC = () => {
+  const wallets = useWallets();
+  const connectedWallet = wallets[0];
+
+  return (
+    <div>
+      {connectedWallet ? (
+        <div>
+          Connected: {connectedWallet.getAddress().slice(0, 6)}...{connectedWallet.getAddress().slice(-4)}
+        </div>
+      ) : (
+        <button onClick={() => connectedWallet?.connect()}>
+          Connect Sui Wallet
+        </button>
+      )}
+    </div>
+  );
+};
+Integrate this component in your main layout (e.g. in App.tsx) so users can connect their Sui wallet as needed.C. NFT Minting with a Creative "Stamp"When constructing the NFT minting transaction (in WormholePage.tsx or MintNFT.tsx), add the audit certificate text that includes a creative stamp. For instance:import { TransactionBlock } from "@mysten/sui.js";
+import { NFT_PACKAGE_ID } from "./constants";
+
+async function mintCertificate(reportUrl: string, mintTx: any) {
+  const tx = new TransactionBlock();
+  tx.moveCall({
+    target: `${NFT_PACKAGE_ID}::nft::mint_to_sender`,
+    arguments: [
+      tx.pure("Audit Report Certificate"), // NFT Name
+      // Description includes a creative stamp "Certified by AuditWarp"
+      tx.pure("This report has been thoroughly audited and is certified by AuditWarp. [Certified by AuditWarp]"),
+      tx.pure(reportUrl)
+    ]
+  });
+  await mintTx({ transaction: tx });
+}
+Develop a UI component where the user can further customize stamp text, color, or even overlay a graphic if desired.D. AI Audit Integration using Google GeminiReplace your previous AI audit call with this function in (for example) src/aiAudit.ts:import { GoogleGenerativeAI } from "@google/genai";
+
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+
+export async function callAIAudit(contractCode: string): Promise<string> {
+  const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  const prompt = `
+    You are an expert blockchain auditor. Analyze the following smart contract code for vulnerabilities and logical errors.
+    
+    Contract Code:
+    ${contractCode}
+    
+    Provide a detailed report with:
+      - Summary of Risks
+      - Detailed Findings
+      - Recommendations
+      
+    Include the statement "Certified by AuditWarp" as a creative stamp in your certification.
+  `;
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  return response.text();
+}
+5. Installation & Running on Replit- Install Dependencies:
+Open the Replit shell and run:
+npm install
+- Run the Development Server:
+Launch your app with:
+npm run dev
+- Your application should now be accessible at the Replit-provided URL.
+- Testing:
+- Test the AuditPage: Input contract code, trigger AI audit, generate a PDF (with newline issues fixed), and store the PDF link.
+- Test WormholePage: Ensure MetaMask locks ETH via Wormhole, and the Sui listener mints the NFT certificate with the “Certified by AuditWarp” stamp.
+- Confirm that the Sui wallet connects and displays correctly using WalletStatus.
+6. Final SummaryReplit Creative Build Steps:- Initialize a New Replit Project:
+Choose a Node.js or Vite/React template and name it “AuditWarp”.
+- Recreate the Project Structure:
+Build the directory structure as indicated above and add all required files.
+- Configure Environment & Files:
+- Copy in the provided package.json, .env, vite.config.ts, and replit.nix.
+- Ensure environment variables (Sui key, Gemini API key) are set in .env.
+- Implement & Integrate Source Code:
+- Build frontend components (AuditPage.tsx, WormholePage.tsx, etc.) with creative UI elements.
+- Fix PDF generation by pre‑processing text (remove or split newlines).
+- Integrate AI audit using Google Gemini via @google/genai.
+- Add Sui wallet connection using Mysten Dapp‑Kit.
+- Implement NFT minting that includes a customizable “Certified by AuditWarp” stamp.
+- Install, Run & Debug:
+Run npm install then npm run dev and thoroughly test each component. Use Replit’s browser tools and console for debugging.
