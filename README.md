@@ -5,9 +5,9 @@
 
 ## 🌀 Overview
 
-**SuiAuditWarp** is a cross-chain, AI-powered auditing platform purpose-built for smart contracts on the Move language and the Sui blockchain. By leveraging advanced LLMs, decentralized storage (IPFS), and on-chain proof via Sui NFTs, SuiAuditWarp enables developers to audit their code in seconds and anchor verifiable results on-chain. With seamless cross-chain access enabled by Wormhole and no prior Sui expertise required, it's a powerful tool for securing DeFi, NFT, and multi-chain applications with speed, transparency, and trust.
+**SuiAuditWarp** by **AuditWarp Labs** is a cross-chain, AI-powered auditing platform purpose-built for smart contracts on the Move language and the Sui blockchain. By leveraging advanced LLMs, decentralized storage (IPFS), and on-chain proof via Sui NFTs, SuiAuditWarp enables developers to audit their code in seconds and anchor verifiable results on-chain. With seamless cross-chain access enabled by Wormhole and no prior Sui expertise required, it's a powerful tool for securing DeFi, NFT, and multi-chain applications with speed, transparency, and trust.
 
-Check out the live dapp here: [💧 SuiAuditWarp ](https://cross-chain-audit-neov55.replit.app/)
+Check out the live dapp here: [💧 SuiAuditWarp Dapp ](https://cross-chain-audit-neov55.replit.app/)
 
 ---
 
@@ -58,7 +58,7 @@ Check out the live dapp here: [💧 SuiAuditWarp ](https://cross-chain-audit-neo
 ### 1. Clone the Repo
 
 ```bash
-git clone https://github.com/DEEPML1818/SuiAuditWarp.git
+git clone https://github.com/NeoV55/SuiAuditWarp.git
 cd SuiAuditWarp
 ```
 
