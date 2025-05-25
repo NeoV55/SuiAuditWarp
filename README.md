@@ -1,4 +1,4 @@
-<p align="center"><img src="/logo.png" width="480"\></p>
+<p align="center"><img src="/SuiAuditWarp-by-Labs.png" width="480"\></p>
 
 ## AI-Powered Smart Contract Audits for Move, Secured On-Chain with Sui + Cross-Chain Access via Wormhole
 ****
