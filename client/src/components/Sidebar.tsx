@@ -23,16 +23,12 @@ export default function Sidebar({ currentPath }: SidebarProps) {
         <div className="flex items-center justify-center h-16 px-4 border-b border-dark-800">
           <Link href="/">
             <div className="text-xl font-bold text-white flex items-center cursor-pointer">
-              <img
-                src={logo}
-                alt="SuiAudit Warp Logo"
-                className="h-20 w-auto bg-transparent" // Made background transparent
-                style={{ backgroundColor: "transparent" }}
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = "/default-logo.png";
-                }}
-              />
+              <span
+                className="text-xl font-bold text-white"
+                style={{ fontFamily: "Courier New", fontWeight: "normal" }}
+              >
+                [AuditWarp]
+              </span>
             </div>
           </Link>
         </div>

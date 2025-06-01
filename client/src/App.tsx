@@ -5,6 +5,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Layout from "@/components/Layout";
+import LandingPage from "@/pages/LandingPage";
 import AuditPage from "@/pages/AuditPage";
 import WormholePage from "@/pages/WormholePage";
 import MintNFT from "@/pages/MintNFT";
@@ -38,7 +39,8 @@ function App() {
   // Update the document title based on the current route.
   useEffect(() => {
     const titles: { [key: string]: string } = {
-      "/": "Smart Contract Audit | AuditWarp",
+      "/": "AuditWarp - Smart Contract Audits & NFT Certificates",
+      "/audit": "Smart Contract Audit | AuditWarp",
       "/bridge": "Cross-Chain Bridge | AuditWarp",
       "/mint": "NFT Certification | AuditWarp",
       "/report": "Audit Report | AuditWarp",
@@ -52,49 +54,51 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Layout currentPath={location}>
-          <Switch>
-            <Route
-              path="/"
-              component={() => (
-                <AuditPage
-                  setAuditData={setAuditData}
-                  currentStep={currentStep}
-                  setCurrentStep={setCurrentStep}
-                />
-              )}
-            />
-            <Route
-              path="/bridge"
-              component={() => (
-                <WormholePage
-                  auditData={auditData}
-                  setAuditData={setAuditData}
-                  currentStep={currentStep}
-                  setCurrentStep={setCurrentStep}
-                />
-              )}
-            />
-            <Route
-              path="/mint"
-              component={() => (
-                <MintNFT
-                  auditData={auditData}
-                  currentStep={currentStep}
-                  setCurrentStep={setCurrentStep}
-                />
-              )}
-            />
-            <Route
-              path="/report"
-              component={() => (
-                <PDFViewer auditData={auditData} currentStep={currentStep} />
-              )}
-            />
-            <Route path="/nfts" component={NFTList} />
-            <Route component={NotFound} />
-          </Switch>
-        </Layout>
+        <Switch>
+          <Route path="/" component={LandingPage} />
+          <Route>
+            <Layout currentPath={location}>
+              <Route
+                path="/audit"
+                component={() => (
+                  <AuditPage
+                    setAuditData={setAuditData}
+                    currentStep={currentStep}
+                    setCurrentStep={setCurrentStep}
+                  />
+                )}
+              />
+              <Route
+                path="/bridge"
+                component={() => (
+                  <WormholePage
+                    auditData={auditData}
+                    setAuditData={setAuditData}
+                    currentStep={currentStep}
+                    setCurrentStep={setCurrentStep}
+                  />
+                )}
+              />
+              <Route
+                path="/mint"
+                component={() => (
+                  <MintNFT
+                    auditData={auditData}
+                    currentStep={currentStep}
+                    setCurrentStep={setCurrentStep}
+                  />
+                )}
+              />
+              <Route
+                path="/report"
+                component={() => (
+                  <PDFViewer auditData={auditData} currentStep={currentStep} />
+                )}
+              />
+              <Route path="/nfts" component={NFTList} />
+            </Layout>
+          </Route>
+        </Switch>
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>

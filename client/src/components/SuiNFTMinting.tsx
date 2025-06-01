@@ -53,8 +53,11 @@ export default function SuiNFTMinting({
     const tx = new Transaction();
     tx.moveCall({
       target: `${NFT_PACKAGE_ID}::nft::mint_to_sender`,
-      arguments: [tx.pure.string((`AuditWarp: ${contractName} Certificate`)), // NFT name
-        tx.pure.string((`AuditWarp: Smart contract audit certificate for ${contractName}`)), // NFT description
+      arguments: [
+        tx.pure.string(`AuditWarp: ${contractName} Certificate`), // NFT name
+        tx.pure.string(
+          `AuditWarp: Smart contract audit certificate for ${contractName}`,
+        ), // NFT description
         tx.pure.string(reportUrl),
       ],
       typeArguments: [],
@@ -100,7 +103,9 @@ export default function SuiNFTMinting({
             ✅ NFT Minted Successfully!
           </div>
           <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
-            <h4 className="text-sm font-medium text-gray-300 mb-3">Transaction Details:</h4>
+            <h4 className="text-sm font-medium text-gray-300 mb-3">
+              Transaction Details:
+            </h4>
             <div className="max-h-64 overflow-y-auto">
               <div className="space-y-3 text-xs">
                 <div className="grid grid-cols-3 gap-2">
@@ -109,7 +114,7 @@ export default function SuiNFTMinting({
                     {mintTxResponse.digest}
                   </span>
                 </div>
-                
+
                 {mintTxResponse.effects?.status && (
                   <div className="grid grid-cols-3 gap-2">
                     <span className="text-gray-400 font-medium">Status:</span>
@@ -123,29 +128,36 @@ export default function SuiNFTMinting({
                   <div className="grid grid-cols-3 gap-2">
                     <span className="text-gray-400 font-medium">Gas Used:</span>
                     <span className="col-span-2 font-mono text-yellow-400">
-                      {mintTxResponse.effects.gasUsed.computationCost + mintTxResponse.effects.gasUsed.storageCost} MIST
+                      {mintTxResponse.effects.gasUsed.computationCost +
+                        mintTxResponse.effects.gasUsed.storageCost}{" "}
+                      MIST
                     </span>
                   </div>
                 )}
 
                 {mintTxResponse.effects?.created && (
                   <div className="grid grid-cols-3 gap-2">
-                    <span className="text-gray-400 font-medium">Created Objects:</span>
+                    <span className="text-gray-400 font-medium">
+                      Created Objects:
+                    </span>
                     <div className="col-span-2">
-                      {mintTxResponse.effects.created.map((obj: any, idx: number) => (
-                        <div key={idx} className="mb-1">
-                          <div className="font-mono text-purple-400 text-xs break-all">
-                            {obj.reference.objectId}
+                      {mintTxResponse.effects.created.map(
+                        (obj: any, idx: number) => (
+                          <div key={idx} className="mb-1">
+                            <div className="font-mono text-purple-400 text-xs break-all">
+                              {"https://testnet.suivision.xyz/object/" +
+                                obj.reference.objectId}
+                            </div>
+                            <div className="text-gray-500 text-xs">
+                              Type: {obj.reference.type || "NFT"}
+                            </div>
                           </div>
-                          <div className="text-gray-500 text-xs">
-                            Type: {obj.reference.type || 'NFT'}
-                          </div>
-                        </div>
-                      ))}
+                        ),
+                      )}
                     </div>
                   </div>
                 )}
-                
+
                 <div className="border-t border-gray-700 pt-3 mt-3">
                   <details className="cursor-pointer">
                     <summary className="text-gray-400 font-medium hover:text-gray-300">

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
+import { WalrusStatus } from "@/components/WalrusStatus";
 import CodeEditor from "@/components/CodeEditor";
 import ProgressSteps from "@/components/ProgressSteps";
 import AuditStatusCard from "@/components/AuditStatusCard";
@@ -97,8 +98,7 @@ export default function AuditPage({
   const [, setLocation] = useLocation();
   const [contractName, setContractName] = useState<string>("hello_blockchain");
   const [contractCode, setContractCode] = useState<string>(SAMPLE_CONTRACT);
-  const [blockchainNetwork, setBlockchainNetwork] =
-    useState<string>("Ethereum");
+  const [blockchainNetwork, setBlockchainNetwork] = useState<string>("Sui");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
 
@@ -217,9 +217,8 @@ export default function AuditPage({
       setLocation("/bridge");
     } catch (error) {
       console.error("Audit error:", error);
-      toast.error("Error during audit. Please try again.");
     } finally {
-      setIsLoading(false);
+      setIsLoading(true);
     }
   };
 
@@ -392,8 +391,8 @@ export default function AuditPage({
                         <SelectValue placeholder="Select network" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Ethereum">Ethereum</SelectItem>
                         <SelectItem value="Sui">Sui</SelectItem>
+                        <SelectItem value="Ethereum">Ethereum</SelectItem>
                         <SelectItem value="Solana">Solana</SelectItem>
                         <SelectItem value="Polkadot">Polkadot</SelectItem>
                       </SelectContent>

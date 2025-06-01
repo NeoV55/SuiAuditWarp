@@ -1,0 +1,179 @@
+Example Landing Page Prompt
+Header & Hero Section
+Create an inviting header with your AuditWarp logo and a clear value proposition. Tell visitors in a brief headline and subheading what your site does—for example, "Smart Contract Audits Made Easy" and "Mint Verification NFTs for every audit with just a few clicks."
+Features Section
+Break down the key features in a visually engaging grid or list. For example:
+- Automated Audits: Quickly run smart contract audits with our cutting-edge engine.
+- NFT Certificates: Secure your audit reports on the blockchain with NFT certificates.
+- Easy Integration: Connect your Sui wallet, upload a report, and mint your certificate instantly.
+How It Works Section
+Walk users through the process in three steps:
+- Connect Your Wallet: Use your Sui wallet to log in.
+- Upload Your Audit Report: Submit your report for review.
+- Mint Your NFT: Instantly mint and receive your NFT certificate.
+Call-to-Action Section
+Invite users to get started with a prominent button, such as “Get Started” or “Sign Up Now.”
+Footer
+Include links to FAQs, contact information, and social media.
+
+Sample HTML Markup
+Below is a sample HTML landing page that implements the ideas above. You can further style it using CSS or integrate it into your React/Next.js/Vite project.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AuditWarp - Smart Contract Audits & NFT Certificates</title>
+  <style>
+    /* Basic styles for demonstration */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    header {
+      background: #1a202c;
+      color: #fff;
+      padding: 2rem;
+      text-align: center;
+    }
+    header img {
+      max-width: 150px;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem;
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+    .features, .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature, .step {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .cta {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .cta a {
+      background: #3182ce;
+      color: #fff;
+      padding: 1rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    footer {
+      background: #1a202c;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / Hero Section -->
+  <header>
+    <img src="/logo-with-name.png" alt="AuditWarp Logo" />
+    <h1>Welcome to AuditWarp</h1>
+    <p>Smart Contract Audits Made Easy – Secure your audits with NFT certificates in a few clicks.</p>
+    <nav>
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#howitworks">How It Works</a></li>
+        <li><a href="#getstarted">Get Started</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content Container -->
+  <div class="container">
+    <!-- Features Section -->
+    <section id="features" class="section">
+      <h2>Features</h2>
+      <div class="features">
+        <div class="feature">
+          <h3>Automated Audits</h3>
+          <p>Run thorough smart contract audits quickly using our intelligent tools.</p>
+        </div>
+        <div class="feature">
+          <h3>NFT Certificates</h3>
+          <p>Mint secure NFT certificates to verify your audit results on the blockchain.</p>
+        </div>
+        <div class="feature">
+          <h3>Easy Integration</h3>
+          <p>Connect your Sui wallet and integrate seamlessly with our platform.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="howitworks" class="section">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <strong>Step 1: Connect Your Wallet</strong>
+          <p>Simply connect your Sui wallet to get started.</p>
+        </div>
+        <div class="step">
+          <strong>Step 2: Upload Your Audit Report</strong>
+          <p>Submit your report for a comprehensive audit review.</p>
+        </div>
+        <div class="step">
+          <strong>Step 3: Mint Your NFT Certificate</strong>
+          <p>Mint an NFT certificate for your audit report effortlessly.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call-To-Action Section -->
+    <section id="getstarted" class="section">
+      <h2>Get Started</h2>
+      <p>Join AuditWarp today and secure your smart contract audits with our state-of-the-art NFT certification system.</p>
+      <div class="cta">
+        <a href="/signup">Sign Up Now</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 AuditWarp. All rights reserved.</p>
+  </footer>
+</body>
+</html>
+
+
+
+How to Adapt This Example
+- Images:
+Place your logo-with-name.png image in the correct public directory (or adjust the path as needed).
+- Links:
+Update the navigation links (like /signup) to match your actual routes.
+- Content & Styles:
+Modify the text and style to fit your brand. If you are using a framework like React, you could break this into smaller components.
+- Functionality:
+If your site uses dynamic data (e.g., fetching audit reports), integrate those functions into your React components accordingly.
+This landing page prompt and sample should give visitors a clear guide on how to use your site while showcasing what AuditWarp offers. Feel free to adjust the text, layout, and styling as your brand and functionality require.

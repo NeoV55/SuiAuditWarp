@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, varchar, doublePrecision } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, varchar, doublePrecision, json } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -24,6 +24,7 @@ export const auditReports = pgTable("audit_reports", {
   vulnerabilityScore: doublePrecision("vulnerability_score"),
   ipfsHash: text("ipfs_hash"),
   pdfUrl: text("pdf_url"),
+  walrusMetadata: json("walrus_metadata"), // Added walrus metadata
   createdAt: timestamp("created_at").defaultNow(),
 });
 

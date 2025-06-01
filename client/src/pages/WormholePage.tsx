@@ -29,8 +29,8 @@ export default function WormholePage({
   const [, setLocation] = useLocation();
   // For demonstration purposes, we'll use a mock Sui wallet connection
   const currentAccount = useCurrentAccount();
-const isSuiConnected = !!currentAccount;
-const suiWalletAddress = currentAccount?.address || "";
+  const isSuiConnected = !!currentAccount;
+  const suiWalletAddress = currentAccount?.address || "";
 
   // For demonstration purposes, we'll use mock Ethereum data
   const [isEthConnected, setIsEthConnected] = useState<boolean>(false);
@@ -61,7 +61,6 @@ const suiWalletAddress = currentAccount?.address || "";
     // Redirect if no audit data is available
     if (!auditData) {
       toast.error("Please complete an audit first");
-      setLocation("/");
     }
   }, [auditData, setLocation]);
 
