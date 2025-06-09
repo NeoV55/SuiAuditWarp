@@ -10,7 +10,9 @@ interface SidebarProps {
 
 export default function Sidebar({ currentPath }: SidebarProps) {
   const navItems = [
-    { path: "/", icon: "security", label: "Audit Contract" },
+    { path: "/audit", icon: "security", label: "Audit Contract" },
+    { path: "/dashboard", icon: "dashboard", label: "Dashboard" },
+    { path: "/walrus", icon: "cloud_upload", label: "Walrus Deploy" },
     { path: "/bridge", icon: "swap_horiz", label: "Bridge Assets" },
     { path: "/nfts", icon: "collections", label: "My NFTs" },
     { path: "/report", icon: "history", label: "Audit Report" },

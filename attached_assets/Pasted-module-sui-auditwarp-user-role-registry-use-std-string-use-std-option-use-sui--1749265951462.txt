@@ -1,0 +1,128 @@
+module sui_auditwarp::user_role_registry {
+    use std::string;
+    use std::option;
+    use sui::object::{Self};
+    use sui::tx_context::{Self, TxContext};
+    use sui::transfer;
+    use sui::dynamic_object_field;
+    use sui::event;
+    use std::vector;
+
+    /// Error codes
+    const ERROR_NOT_OWNER: u64 = 0;
+    const ERROR_ALREADY_VERIFIED: u64 = 1;
+
+    // Event for when a user is verified
+    public struct VerificationEvent has copy, drop {
+        user_address: address,
+        verified_by: address,
+        timestamp: u64
+    }
+
+    /// Structure to store a single user profile
+    public struct UserProfile has key, store {
+        id: object::UID,
+        owner: address,
+        role: string::String,           
+        name: string::String,           
+        link: string::String,           
+        is_verified: bool,              
+        verified_by: option::Option<address>,
+        email: option::Option<string::String>,
+        discord: option::Option<string::String>,
+        zoom: option::Option<string::String>,
+        credential_link: option::Option<string::String>,
+    }
+
+    /// Registry struct that owns all profiles
+    public struct UserRegistry has key {
+        id: object::UID,
+        owner: address,
+        verified_addresses: vector<address>
+    }
+
+    /// Create registry with deployer as owner
+    public entry fun create_registry(ctx: &mut TxContext) {
+        let registry = UserRegistry {
+            id: object::new(ctx),
+            owner: tx_context::sender(ctx),
+            verified_addresses: vector::empty()
+        };
+        transfer::share_object(registry);
+    }
+
+    /// Change registry owner - only current owner can do this
+    public entry fun transfer_ownership(
+        registry: &mut UserRegistry,
+        new_owner: address,
+        ctx: &mut TxContext
+    ) {
+        assert!(registry.owner == tx_context::sender(ctx), ERROR_NOT_OWNER);
+        registry.owner = new_owner;
+    }
+
+    /// Register a new user with minimal or full information
+    public entry fun register_user(
+        registry: &mut UserRegistry,
+        role: string::String,
+        name: string::String,
+        link: string::String,
+        ctx: &mut TxContext
+    ) {
+        let profile = UserProfile {
+            id: object::new(ctx),
+            owner: tx_context::sender(ctx),
+            role,
+            name,
+            link,
+            is_verified: false,
+            verified_by: option::none(),
+            email: option::none(),
+            discord: option::none(),
+            zoom: option::none(),
+            credential_link: option::none(),
+        };
+
+        // Store profile as a dynamic field of the registry
+        dynamic_object_field::add(&mut registry.id, tx_context::sender(ctx), profile);
+    }
+
+    /// Verify user and emit event for cross-package verification
+    public entry fun verify_user(
+        registry: &mut UserRegistry,
+        user_address: address,
+        ctx: &mut TxContext
+    ) {
+        assert!(registry.owner == tx_context::sender(ctx), ERROR_NOT_OWNER);
+
+        let profile = dynamic_object_field::borrow_mut<address, UserProfile>(
+            &mut registry.id,
+            user_address
+        );
+        
+        profile.is_verified = true;
+        profile.verified_by = option::some(tx_context::sender(ctx));
+        
+        // Add to verified addresses list
+        if (!vector::contains(&registry.verified_addresses, &user_address)) {
+            vector::push_back(&mut registry.verified_addresses, user_address);
+        };
+
+        // Emit verification event
+        event::emit(VerificationEvent {
+            user_address,
+            verified_by: tx_context::sender(ctx),
+            timestamp: tx_context::epoch(ctx)
+        });
+    }
+
+    /// Public function to check if an address is verified
+    public fun is_address_verified(registry: &UserRegistry, addr: address): bool {
+        vector::contains(&registry.verified_addresses, &addr)
+    }
+
+    /// Get all verified addresses
+    public fun get_verified_addresses(registry: &UserRegistry): &vector<address> {
+        &registry.verified_addresses
+    }
+}

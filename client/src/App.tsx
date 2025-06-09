@@ -9,8 +9,11 @@ import LandingPage from "@/pages/LandingPage";
 import AuditPage from "@/pages/AuditPage";
 import WormholePage from "@/pages/WormholePage";
 import MintNFT from "@/pages/MintNFT";
+import NFTMintPage from "@/pages/NFTMintPage";
 import PDFViewer from "@/pages/PDFViewer";
 import NFTList from "@/pages/NFTList";
+import Dashboard from "@/pages/Dashboard";
+import WalrusDeploymentPage from "@/pages/WalrusDeploymentPage";
 import NotFound from "@/pages/not-found";
 import { queryClient } from "./lib/queryClient";
 
@@ -22,6 +25,13 @@ export type AuditData = {
   blockchain: string;
   auditResult?: string;
   ipfsHash?: string;
+  walrusId?: string;
+  walrusMetadata?: {
+    blobId: string;
+    size: number;
+    uploadedAt: string;
+    contentType?: string;
+  };
   pdfUrl?: string;
   ethAmount?: string;
   vulnerabilityScore?: number;
@@ -43,8 +53,10 @@ function App() {
       "/audit": "Smart Contract Audit | AuditWarp",
       "/bridge": "Cross-Chain Bridge | AuditWarp",
       "/mint": "NFT Certification | AuditWarp",
+      "/nft-mint": "NFT Certificate Deployment | AuditWarp",
       "/report": "Audit Report | AuditWarp",
       "/nfts": "My NFTs | AuditWarp",
+      "/walrus": "Walrus Deployment | AuditWarp",
     };
     document.title =
       titles[location] ||
@@ -82,11 +94,13 @@ function App() {
               <Route
                 path="/mint"
                 component={() => (
-                  <MintNFT
-                    auditData={auditData}
-                    currentStep={currentStep}
-                    setCurrentStep={setCurrentStep}
-                  />
+                  <NFTMintPage auditData={auditData} />
+                )}
+              />
+              <Route
+                path="/nft-mint"
+                component={() => (
+                  <NFTMintPage auditData={auditData} />
                 )}
               />
               <Route
@@ -96,6 +110,8 @@ function App() {
                 )}
               />
               <Route path="/nfts" component={NFTList} />
+              <Route path="/dashboard" component={Dashboard} />
+              <Route path="/walrus" component={WalrusDeploymentPage} />
             </Layout>
           </Route>
         </Switch>

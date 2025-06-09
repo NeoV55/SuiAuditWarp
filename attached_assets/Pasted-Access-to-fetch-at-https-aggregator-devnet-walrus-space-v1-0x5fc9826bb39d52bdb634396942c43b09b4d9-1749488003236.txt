@@ -1,0 +1,110 @@
+Access to fetch at 'https://aggregator-devnet.walrus.space/v1/0x5fc9826bb39d52bdb634396942c43b09b4d9a98afc504127e620644d10810450' from origin 'https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+injected.js:1 
+            
+            
+           HEAD https://aggregator-devnet.walrus.space/v1/0x5fc9826bb39d52bdb634396942c43b09b4d9a98afc504127e620644d10810450 net::ERR_FAILED 522
+value @ injected.js:1
+verifyWalrusBlob @ walrus.ts:194
+verifyBlob @ WalrusStorageDetails.tsx:44
+(anonymous) @ WalrusStorageDetails.tsx:37
+commitHookEffectListMount @ chunk-F34GCA6J.js?v=76ceb527:16963
+invokePassiveEffectMountInDEV @ chunk-F34GCA6J.js?v=76ceb527:18374
+invokeEffectsInDev @ chunk-F34GCA6J.js?v=76ceb527:19754
+commitDoubleInvokeEffectsInDEV @ chunk-F34GCA6J.js?v=76ceb527:19739
+flushPassiveEffectsImpl @ chunk-F34GCA6J.js?v=76ceb527:19556
+flushPassiveEffects @ chunk-F34GCA6J.js?v=76ceb527:19500
+performSyncWorkOnRoot @ chunk-F34GCA6J.js?v=76ceb527:18921
+flushSyncCallbacks @ chunk-F34GCA6J.js?v=76ceb527:9166
+commitRootImpl @ chunk-F34GCA6J.js?v=76ceb527:19485
+commitRoot @ chunk-F34GCA6J.js?v=76ceb527:19330
+finishConcurrentRender @ chunk-F34GCA6J.js?v=76ceb527:18858
+performConcurrentWorkOnRoot @ chunk-F34GCA6J.js?v=76ceb527:18768
+workLoop @ chunk-F34GCA6J.js?v=76ceb527:197
+flushWork @ chunk-F34GCA6J.js?v=76ceb527:176
+performWorkUntilDeadline @ chunk-F34GCA6J.js?v=76ceb527:384
+walrus.ts:208 Walrus blob verification error: TypeError: Failed to fetch
+    at value (injected.js:1:6941583)
+    at verifyWalrusBlob (walrus.ts:194:28)
+    at verifyBlob (WalrusStorageDetails.tsx:44:34)
+    at WalrusStorageDetails.tsx:37:7
+    at commitHookEffectListMount (chunk-F34GCA6J.js?v=76ceb527:16963:34)
+    at invokePassiveEffectMountInDEV (chunk-F34GCA6J.js?v=76ceb527:18374:19)
+    at invokeEffectsInDev (chunk-F34GCA6J.js?v=76ceb527:19754:19)
+    at commitDoubleInvokeEffectsInDEV (chunk-F34GCA6J.js?v=76ceb527:19739:15)
+    at flushPassiveEffectsImpl (chunk-F34GCA6J.js?v=76ceb527:19556:13)
+    at flushPassiveEffects (chunk-F34GCA6J.js?v=76ceb527:19500:22)
+verifyWalrusBlob @ walrus.ts:208
+await in verifyWalrusBlob
+verifyBlob @ WalrusStorageDetails.tsx:44
+(anonymous) @ WalrusStorageDetails.tsx:37
+commitHookEffectListMount @ chunk-F34GCA6J.js?v=76ceb527:16963
+invokePassiveEffectMountInDEV @ chunk-F34GCA6J.js?v=76ceb527:18374
+invokeEffectsInDev @ chunk-F34GCA6J.js?v=76ceb527:19754
+commitDoubleInvokeEffectsInDEV @ chunk-F34GCA6J.js?v=76ceb527:19739
+flushPassiveEffectsImpl @ chunk-F34GCA6J.js?v=76ceb527:19556
+flushPassiveEffects @ chunk-F34GCA6J.js?v=76ceb527:19500
+performSyncWorkOnRoot @ chunk-F34GCA6J.js?v=76ceb527:18921
+flushSyncCallbacks @ chunk-F34GCA6J.js?v=76ceb527:9166
+commitRootImpl @ chunk-F34GCA6J.js?v=76ceb527:19485
+commitRoot @ chunk-F34GCA6J.js?v=76ceb527:19330
+finishConcurrentRender @ chunk-F34GCA6J.js?v=76ceb527:18858
+performConcurrentWorkOnRoot @ chunk-F34GCA6J.js?v=76ceb527:18768
+workLoop @ chunk-F34GCA6J.js?v=76ceb527:197
+flushWork @ chunk-F34GCA6J.js?v=76ceb527:176
+performWorkUntilDeadline @ chunk-F34GCA6J.js?v=76ceb527:384
+bridge:1 Access to fetch at 'https://aggregator-devnet.walrus.space/v1/0x5fc9826bb39d52bdb634396942c43b09b4d9a98afc504127e620644d10810450' from origin 'https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+injected.js:1 
+            
+            
+           HEAD https://aggregator-devnet.walrus.space/v1/0x5fc9826bb39d52bdb634396942c43b09b4d9a98afc504127e620644d10810450 net::ERR_FAILED 522
+value @ injected.js:1
+verifyWalrusBlob @ walrus.ts:194
+verifyBlob @ WalrusStorageDetails.tsx:44
+(anonymous) @ WalrusStorageDetails.tsx:37
+commitHookEffectListMount @ chunk-F34GCA6J.js?v=76ceb527:16963
+commitPassiveMountOnFiber @ chunk-F34GCA6J.js?v=76ceb527:18206
+commitPassiveMountEffects_complete @ chunk-F34GCA6J.js?v=76ceb527:18179
+commitPassiveMountEffects_begin @ chunk-F34GCA6J.js?v=76ceb527:18169
+commitPassiveMountEffects @ chunk-F34GCA6J.js?v=76ceb527:18159
+flushPassiveEffectsImpl @ chunk-F34GCA6J.js?v=76ceb527:19543
+flushPassiveEffects @ chunk-F34GCA6J.js?v=76ceb527:19500
+performSyncWorkOnRoot @ chunk-F34GCA6J.js?v=76ceb527:18921
+flushSyncCallbacks @ chunk-F34GCA6J.js?v=76ceb527:9166
+commitRootImpl @ chunk-F34GCA6J.js?v=76ceb527:19485
+commitRoot @ chunk-F34GCA6J.js?v=76ceb527:19330
+finishConcurrentRender @ chunk-F34GCA6J.js?v=76ceb527:18858
+performConcurrentWorkOnRoot @ chunk-F34GCA6J.js?v=76ceb527:18768
+workLoop @ chunk-F34GCA6J.js?v=76ceb527:197
+flushWork @ chunk-F34GCA6J.js?v=76ceb527:176
+performWorkUntilDeadline @ chunk-F34GCA6J.js?v=76ceb527:384
+walrus.ts:208 Walrus blob verification error: TypeError: Failed to fetch
+    at value (injected.js:1:6941583)
+    at verifyWalrusBlob (walrus.ts:194:28)
+    at verifyBlob (WalrusStorageDetails.tsx:44:34)
+    at WalrusStorageDetails.tsx:37:7
+    at commitHookEffectListMount (chunk-F34GCA6J.js?v=76ceb527:16963:34)
+    at commitPassiveMountOnFiber (chunk-F34GCA6J.js?v=76ceb527:18206:19)
+    at commitPassiveMountEffects_complete (chunk-F34GCA6J.js?v=76ceb527:18179:17)
+    at commitPassiveMountEffects_begin (chunk-F34GCA6J.js?v=76ceb527:18169:15)
+    at commitPassiveMountEffects (chunk-F34GCA6J.js?v=76ceb527:18159:11)
+    at flushPassiveEffectsImpl (chunk-F34GCA6J.js?v=76ceb527:19543:11)
+verifyWalrusBlob @ walrus.ts:208
+await in verifyWalrusBlob
+verifyBlob @ WalrusStorageDetails.tsx:44
+(anonymous) @ WalrusStorageDetails.tsx:37
+commitHookEffectListMount @ chunk-F34GCA6J.js?v=76ceb527:16963
+commitPassiveMountOnFiber @ chunk-F34GCA6J.js?v=76ceb527:18206
+commitPassiveMountEffects_complete @ chunk-F34GCA6J.js?v=76ceb527:18179
+commitPassiveMountEffects_begin @ chunk-F34GCA6J.js?v=76ceb527:18169
+commitPassiveMountEffects @ chunk-F34GCA6J.js?v=76ceb527:18159
+flushPassiveEffectsImpl @ chunk-F34GCA6J.js?v=76ceb527:19543
+flushPassiveEffects @ chunk-F34GCA6J.js?v=76ceb527:19500
+performSyncWorkOnRoot @ chunk-F34GCA6J.js?v=76ceb527:18921
+flushSyncCallbacks @ chunk-F34GCA6J.js?v=76ceb527:9166
+commitRootImpl @ chunk-F34GCA6J.js?v=76ceb527:19485
+commitRoot @ chunk-F34GCA6J.js?v=76ceb527:19330
+finishConcurrentRender @ chunk-F34GCA6J.js?v=76ceb527:18858
+performConcurrentWorkOnRoot @ chunk-F34GCA6J.js?v=76ceb527:18768
+workLoop @ chunk-F34GCA6J.js?v=76ceb527:197
+flushWork @ chunk-F34GCA6J.js?v=76ceb527:176
+performWorkUntilDeadline @ chunk-F34GCA6J.js?v=76ceb527:384

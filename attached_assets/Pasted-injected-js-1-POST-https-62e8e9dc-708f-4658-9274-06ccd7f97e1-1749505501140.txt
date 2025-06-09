@@ -1,0 +1,106 @@
+injected.js:1 
+            
+            
+           POST https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/api/walrus/deploy 500 (Internal Server Error)
+value @ injected.js:1
+handleDeployment @ WalrusDeploymentWizard.tsx:151
+await in handleDeployment
+callCallback2 @ chunk-F34GCA6J.js?v=28a8eb77:3680
+invokeGuardedCallbackDev @ chunk-F34GCA6J.js?v=28a8eb77:3705
+invokeGuardedCallback @ chunk-F34GCA6J.js?v=28a8eb77:3739
+invokeGuardedCallbackAndCatchFirstError @ chunk-F34GCA6J.js?v=28a8eb77:3742
+executeDispatch @ chunk-F34GCA6J.js?v=28a8eb77:7046
+processDispatchQueueItemsInOrder @ chunk-F34GCA6J.js?v=28a8eb77:7066
+processDispatchQueue @ chunk-F34GCA6J.js?v=28a8eb77:7075
+dispatchEventsForPlugins @ chunk-F34GCA6J.js?v=28a8eb77:7083
+(anonymous) @ chunk-F34GCA6J.js?v=28a8eb77:7206
+batchedUpdates$1 @ chunk-F34GCA6J.js?v=28a8eb77:18966
+batchedUpdates @ chunk-F34GCA6J.js?v=28a8eb77:3585
+dispatchEventForPluginEventSystem @ chunk-F34GCA6J.js?v=28a8eb77:7205
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-F34GCA6J.js?v=28a8eb77:5484
+dispatchEvent @ chunk-F34GCA6J.js?v=28a8eb77:5478
+dispatchDiscreteEvent @ chunk-F34GCA6J.js?v=28a8eb77:5455
+WalrusDeploymentWizard.tsx:185 Deployment error: Error: Walrus deployment failed: require is not defined
+    at handleDeployment (WalrusDeploymentWizard.tsx:165:15)
+handleDeployment @ WalrusDeploymentWizard.tsx:185
+await in handleDeployment
+callCallback2 @ chunk-F34GCA6J.js?v=28a8eb77:3680
+invokeGuardedCallbackDev @ chunk-F34GCA6J.js?v=28a8eb77:3705
+invokeGuardedCallback @ chunk-F34GCA6J.js?v=28a8eb77:3739
+invokeGuardedCallbackAndCatchFirstError @ chunk-F34GCA6J.js?v=28a8eb77:3742
+executeDispatch @ chunk-F34GCA6J.js?v=28a8eb77:7046
+processDispatchQueueItemsInOrder @ chunk-F34GCA6J.js?v=28a8eb77:7066
+processDispatchQueue @ chunk-F34GCA6J.js?v=28a8eb77:7075
+dispatchEventsForPlugins @ chunk-F34GCA6J.js?v=28a8eb77:7083
+(anonymous) @ chunk-F34GCA6J.js?v=28a8eb77:7206
+batchedUpdates$1 @ chunk-F34GCA6J.js?v=28a8eb77:18966
+batchedUpdates @ chunk-F34GCA6J.js?v=28a8eb77:3585
+dispatchEventForPluginEventSystem @ chunk-F34GCA6J.js?v=28a8eb77:7205
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-F34GCA6J.js?v=28a8eb77:5484
+dispatchEvent @ chunk-F34GCA6J.js?v=28a8eb77:5478
+dispatchDiscreteEvent @ chunk-F34GCA6J.js?v=28a8eb77:5455
+injected.js:1 
+            
+            
+           POST https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/api/walrus/deploy 500 (Internal Server Error)
+value @ injected.js:1
+handleDeployment @ WalrusDeploymentWizard.tsx:151
+await in handleDeployment
+callCallback2 @ chunk-F34GCA6J.js?v=28a8eb77:3680
+invokeGuardedCallbackDev @ chunk-F34GCA6J.js?v=28a8eb77:3705
+invokeGuardedCallback @ chunk-F34GCA6J.js?v=28a8eb77:3739
+invokeGuardedCallbackAndCatchFirstError @ chunk-F34GCA6J.js?v=28a8eb77:3742
+executeDispatch @ chunk-F34GCA6J.js?v=28a8eb77:7046
+processDispatchQueueItemsInOrder @ chunk-F34GCA6J.js?v=28a8eb77:7066
+processDispatchQueue @ chunk-F34GCA6J.js?v=28a8eb77:7075
+dispatchEventsForPlugins @ chunk-F34GCA6J.js?v=28a8eb77:7083
+(anonymous) @ chunk-F34GCA6J.js?v=28a8eb77:7206
+batchedUpdates$1 @ chunk-F34GCA6J.js?v=28a8eb77:18966
+batchedUpdates @ chunk-F34GCA6J.js?v=28a8eb77:3585
+dispatchEventForPluginEventSystem @ chunk-F34GCA6J.js?v=28a8eb77:7205
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-F34GCA6J.js?v=28a8eb77:5484
+dispatchEvent @ chunk-F34GCA6J.js?v=28a8eb77:5478
+dispatchDiscreteEvent @ chunk-F34GCA6J.js?v=28a8eb77:5455
+WalrusDeploymentWizard.tsx:185 Deployment error: Error: Walrus deployment failed: require is not defined
+    at handleDeployment (WalrusDeploymentWizard.tsx:165:15)
+handleDeployment @ WalrusDeploymentWizard.tsx:185
+await in handleDeployment
+callCallback2 @ chunk-F34GCA6J.js?v=28a8eb77:3680
+invokeGuardedCallbackDev @ chunk-F34GCA6J.js?v=28a8eb77:3705
+invokeGuardedCallback @ chunk-F34GCA6J.js?v=28a8eb77:3739
+invokeGuardedCallbackAndCatchFirstError @ chunk-F34GCA6J.js?v=28a8eb77:3742
+executeDispatch @ chunk-F34GCA6J.js?v=28a8eb77:7046
+processDispatchQueueItemsInOrder @ chunk-F34GCA6J.js?v=28a8eb77:7066
+processDispatchQueue @ chunk-F34GCA6J.js?v=28a8eb77:7075
+dispatchEventsForPlugins @ chunk-F34GCA6J.js?v=28a8eb77:7083
+(anonymous) @ chunk-F34GCA6J.js?v=28a8eb77:7206
+batchedUpdates$1 @ chunk-F34GCA6J.js?v=28a8eb77:18966
+batchedUpdates @ chunk-F34GCA6J.js?v=28a8eb77:3585
+dispatchEventForPluginEventSystem @ chunk-F34GCA6J.js?v=28a8eb77:7205
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-F34GCA6J.js?v=28a8eb77:5484
+dispatchEvent @ chunk-F34GCA6J.js?v=28a8eb77:5478
+dispatchDiscreteEvent @ chunk-F34GCA6J.js?v=28a8eb77:5455
+injected.js:1 
+            
+            
+           POST https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev/api/walrus/deploy 500 (Internal Server Error)
+value @ injected.js:1
+handleDeployment @ WalrusDeploymentWizard.tsx:151
+await in handleDeployment
+callCallback2 @ chunk-F34GCA6J.js?v=28a8eb77:3680
+invokeGuardedCallbackDev @ chunk-F34GCA6J.js?v=28a8eb77:3705
+invokeGuardedCallback @ chunk-F34GCA6J.js?v=28a8eb77:3739
+invokeGuardedCallbackAndCatchFirstError @ chunk-F34GCA6J.js?v=28a8eb77:3742
+executeDispatch @ chunk-F34GCA6J.js?v=28a8eb77:7046
+processDispatchQueueItemsInOrder @ chunk-F34GCA6J.js?v=28a8eb77:7066
+processDispatchQueue @ chunk-F34GCA6J.js?v=28a8eb77:7075
+dispatchEventsForPlugins @ chunk-F34GCA6J.js?v=28a8eb77:7083
+(anonymous) @ chunk-F34GCA6J.js?v=28a8eb77:7206
+batchedUpdates$1 @ chunk-F34GCA6J.js?v=28a8eb77:18966
+batchedUpdates @ chunk-F34GCA6J.js?v=28a8eb77:3585
+dispatchEventForPluginEventSystem @ chunk-F34GCA6J.js?v=28a8eb77:7205
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-F34GCA6J.js?v=28a8eb77:5484
+dispatchEvent @ chunk-F34GCA6J.js?v=28a8eb77:5478
+dispatchDiscreteEvent @ chunk-F34GCA6J.js?v=28a8eb77:5455
+WalrusDeploymentWizard.tsx:185 Deployment error: Error: Walrus deployment failed: require is not defined
+    at handleDeployment (WalrusDeploymentWizard.tsx:165:15)

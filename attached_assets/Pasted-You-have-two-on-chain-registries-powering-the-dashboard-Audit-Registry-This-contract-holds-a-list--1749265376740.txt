@@ -1,0 +1,15 @@
+You have two on-chain registries powering the dashboard:
+
+Audit Registry
+This contract holds a list of every audit submitted, each represented by an NFT and an IPFS link. Every audit record includes the ID of the report-NFT, the auditor’s wallet address, the audited contract address, the exact timestamp of submission (in milliseconds), plus four pieces of human-friendly metadata: the auditor’s role title, their displayed name, an optional link to their personal website or profile, and a “verified” flag (together with who did the verification). Only addresses that an owner-controlled list has marked as verified may add new audits. Whenever an audit is added, an event fires so you can broadcast updates in real time.
+
+User Role Registry
+This contract maintains public profiles for any participant in the system—auditor, developer, or otherwise. Each profile ties a wallet address to a declared role, a chosen display name, and an optional link. Profiles start out unverified; the registry’s deployer (owner) can flip a verified flag on any address, recording who approved it and when. It also emits an event on every new verification, so the frontend can highlight newly approved users immediately.
+
+On the dashboard, you will present two main views:
+
+Audit Feed
+A continuously updated list of all audits from the audit registry. Each entry shows the target contract address, the date-and-time when the audit was recorded, the auditor’s display name (linked out to their profile), the role they claimed, and a little badge if they’re verified. There’s also a direct link to download or view the NFT report from IPFS. Only verified auditors can appear here; unverified attempts are impossible by design.
+
+Verified User Directory
+A directory of every address the owner has blessed in the user role registry. Each user card displays their role title, display name, and profile link. A “verified” checkmark shows that the owner has approved this identity, and clicking on a card could reveal more contact or credential links (email, Discord handle, Zoom link, or credential URL) if they’ve opted to share them.

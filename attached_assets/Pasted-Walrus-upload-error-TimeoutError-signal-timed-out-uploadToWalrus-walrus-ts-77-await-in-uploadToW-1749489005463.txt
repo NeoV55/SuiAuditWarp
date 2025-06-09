@@ -1,0 +1,40 @@
+Walrus upload error: TimeoutError: signal timed out
+uploadToWalrus @ walrus.ts:77
+await in uploadToWalrus
+handleStartAudit @ AuditPage.tsx:198
+await in handleStartAudit
+callCallback2 @ chunk-F34GCA6J.js?v=76ceb527:3680
+invokeGuardedCallbackDev @ chunk-F34GCA6J.js?v=76ceb527:3705
+invokeGuardedCallback @ chunk-F34GCA6J.js?v=76ceb527:3739
+invokeGuardedCallbackAndCatchFirstError @ chunk-F34GCA6J.js?v=76ceb527:3742
+executeDispatch @ chunk-F34GCA6J.js?v=76ceb527:7046
+processDispatchQueueItemsInOrder @ chunk-F34GCA6J.js?v=76ceb527:7066
+processDispatchQueue @ chunk-F34GCA6J.js?v=76ceb527:7075
+dispatchEventsForPlugins @ chunk-F34GCA6J.js?v=76ceb527:7083
+(anonymous) @ chunk-F34GCA6J.js?v=76ceb527:7206
+batchedUpdates$1 @ chunk-F34GCA6J.js?v=76ceb527:18966
+batchedUpdates @ chunk-F34GCA6J.js?v=76ceb527:3585
+dispatchEventForPluginEventSystem @ chunk-F34GCA6J.js?v=76ceb527:7205
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-F34GCA6J.js?v=76ceb527:5484
+dispatchEvent @ chunk-F34GCA6J.js?v=76ceb527:5478
+dispatchDiscreteEvent @ chunk-F34GCA6J.js?v=76ceb527:5455
+AuditPage.tsx:209 Walrus upload error: TimeoutError: signal timed out
+handleStartAudit @ AuditPage.tsx:209
+await in handleStartAudit
+callCallback2 @ chunk-F34GCA6J.js?v=76ceb527:3680
+invokeGuardedCallbackDev @ chunk-F34GCA6J.js?v=76ceb527:3705
+invokeGuardedCallback @ chunk-F34GCA6J.js?v=76ceb527:3739
+invokeGuardedCallbackAndCatchFirstError @ chunk-F34GCA6J.js?v=76ceb527:3742
+executeDispatch @ chunk-F34GCA6J.js?v=76ceb527:7046
+processDispatchQueueItemsInOrder @ chunk-F34GCA6J.js?v=76ceb527:7066
+processDispatchQueue @ chunk-F34GCA6J.js?v=76ceb527:7075
+dispatchEventsForPlugins @ chunk-F34GCA6J.js?v=76ceb527:7083
+(anonymous) @ chunk-F34GCA6J.js?v=76ceb527:7206
+batchedUpdates$1 @ chunk-F34GCA6J.js?v=76ceb527:18966
+batchedUpdates @ chunk-F34GCA6J.js?v=76ceb527:3585
+dispatchEventForPluginEventSystem @ chunk-F34GCA6J.js?v=76ceb527:7205
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-F34GCA6J.js?v=76ceb527:5484
+dispatchEvent @ chunk-F34GCA6J.js?v=76ceb527:5478
+dispatchDiscreteEvent @ chunk-F34GCA6J.js?v=76ceb527:5455
+AuditPage.tsx:263 Audit error: Error: Walrus upload failed
+    at handleStartAudit (AuditPage.tsx:211:17)

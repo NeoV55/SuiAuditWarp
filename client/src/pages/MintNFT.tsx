@@ -12,6 +12,7 @@ import AuditStatusCard from "@/components/AuditStatusCard";
 import NFTPreview from "@/components/NFTPreview";
 import { mintNFT } from "@/lib/sui";
 import SuiNFTMinting from "@/components/SuiNFTMinting";
+import WalrusStorageDetails from "@/components/WalrusStorageDetails";
 import { AuditData } from "@/App";
 import {
   formatDate,
@@ -49,8 +50,9 @@ export default function MintNFT({
 
     // Initialize NFT metadata
     setNftName(`${auditData.contractName} Audit Certificate`);
+    const storageType = auditData.walrusId ? "Walrus" : auditData.ipfsHash ? "IPFS" : "local storage";
     setNftDescription(
-      `This NFT certifies that the ${auditData.contractName} smart contract has been audited by AuditWarp on ${formatDate(new Date())}. The audit report is permanently stored on IPFS.`,
+      `This NFT certifies that the ${auditData.contractName} smart contract has been audited by AuditWarp on ${formatDate(new Date())}. The audit report is permanently stored on ${storageType}.`,
     );
 
     // Simulate VAA verification (in a real app, this would listen for the VAA from Wormhole)
@@ -200,25 +202,38 @@ export default function MintNFT({
 
                       <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">
-                          IPFS URL
+                          {auditData.walrusId ? "Walrus URL" : "IPFS URL"}
                         </label>
                         <Input
                           type="text"
                           className="block w-full rounded-md bg-dark-900 border border-dark-800 text-white p-2 text-sm focus:border-primary-500 focus:ring-primary-500 font-mono"
-                          value={`https://gateway.pinata.cloud/ipfs/${auditData.ipfsHash}`}
+                          value={
+                            auditData.walrusId
+                              ? `https://aggregator.walrus-testnet.walrus.space/v1/${auditData.walrusId}`
+                              : `https://gateway.pinata.cloud/ipfs/${auditData.ipfsHash}`
+                          }
                           readOnly
                         />
                       </div>
 
+                      {/* Walrus Storage Details */}
+                      {auditData.walrusId && (
+                        <WalrusStorageDetails
+                          blobId={auditData.walrusId}
+                          metadata={auditData.walrusMetadata}
+                          showVerification={true}
+                          compact={true}
+                        />
+                      )}
+
+                      {/* Bridge Status */}
                       <div className="p-4 bg-dark-900 rounded-md">
                         <h3 className="text-sm font-medium text-white mb-2">
-                          Wormhole VAA Details
+                          Bridge Status
                         </h3>
                         <div className="space-y-2">
                           <div className="flex justify-between">
-                            <span className="text-xs text-gray-400">
-                              VAA Status
-                            </span>
+                            <span className="text-xs text-gray-400">VAA Status</span>
                             <span
                               className={`text-xs ${
                                 vaaStatus === "Verified"
@@ -232,17 +247,7 @@ export default function MintNFT({
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-xs text-gray-400">
-                              Source Chain Tx
-                            </span>
-                            <span className="text-xs text-white font-mono truncate">
-                              0x4a2...7b9c
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-xs text-gray-400">
-                              ETH Locked
-                            </span>
+                            <span className="text-xs text-gray-400">ETH Locked</span>
                             <span className="text-xs text-white">
                               {auditData.ethAmount || "0.01"} ETH
                             </span>
@@ -265,7 +270,9 @@ export default function MintNFT({
                   </Button>
                   <SuiNFTMinting
                     reportUrl={
-                      auditData?.ipfsHash
+                      auditData?.walrusId
+                        ? `https://aggregator.walrus-testnet.walrus.space/v1/${auditData.walrusId}`
+                        : auditData?.ipfsHash
                         ? `https://gateway.pinata.cloud/ipfs/${auditData.ipfsHash}`
                         : ""
                     }

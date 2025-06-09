@@ -1,0 +1,128 @@
+module sui_auditwarp::audit_registry {
+    use std::string;
+    use std::vector;
+    use std::option;
+    use sui::object::{Self, ID};
+    use sui::tx_context::{Self, TxContext};
+    use sui::clock::{Self, Clock};
+    use sui::transfer;
+    use sui::event;
+
+    /// Error codes
+    const ERROR_NOT_OWNER: u64 = 0;
+    const ERROR_NOT_VERIFIED: u64 = 1;
+
+    // Event emitted when audit is added
+    public struct AuditAddedEvent has copy, drop {
+        auditor: address,
+        timestamp: u64,
+        nft_id: ID,
+        target_contract: string::String
+    }
+
+    // Structure to store individual audit data
+    public struct AuditRecord has key, store {
+        id: object::UID,
+        nft_id: ID,                     
+        ipfs_hash: string::String,      
+        audited_by: address,            
+        target_contract: string::String,
+        timestamp: u64,                 
+        // User profile data
+        role: string::String,
+        name: string::String,
+        profile_link: string::String,
+        is_verified: bool,
+        verified_by: option::Option<address>
+    }
+
+    public struct AuditRegistry has key {
+        id: object::UID,
+        owner: address,
+        records: vector<ID>,
+        // Track verified auditor addresses locally
+        verified_auditors: vector<address>
+    }
+
+    /// Create registry with deployer as owner
+    public entry fun create_registry(ctx: &mut TxContext) {
+        let registry = AuditRegistry {
+            id: object::new(ctx),
+            owner: tx_context::sender(ctx),
+            records: vector::empty(),
+            verified_auditors: vector::empty()
+        };
+        transfer::share_object(registry);
+    }
+
+    /// Add a verified auditor (called by registry owner)
+    public entry fun add_verified_auditor(
+        registry: &mut AuditRegistry,
+        auditor: address,
+        ctx: &mut TxContext
+    ) {
+        assert!(registry.owner == tx_context::sender(ctx), ERROR_NOT_OWNER);
+        if (!vector::contains(&registry.verified_auditors, &auditor)) {
+            vector::push_back(&mut registry.verified_auditors, auditor);
+        }
+    }
+
+    /// Add audit record (requires verified status)
+    public entry fun add_audit(
+        registry: &mut AuditRegistry,
+        clock: &Clock,
+        nft_id: ID,
+        ipfs_hash: string::String,
+        target_contract: string::String,
+        role: string::String,
+        name: string::String,
+        profile_link: string::String,
+        ctx: &mut TxContext
+    ) {
+        let sender = tx_context::sender(ctx);
+        // Check if auditor is verified locally
+        assert!(vector::contains(&registry.verified_auditors, &sender), ERROR_NOT_VERIFIED);
+
+        let new_record = AuditRecord {
+            id: object::new(ctx),
+            nft_id,
+            ipfs_hash,
+            audited_by: sender,
+            target_contract,
+            timestamp: clock::timestamp_ms(clock),
+            role,
+            name,
+            profile_link,
+            is_verified: true,
+            verified_by: option::some(registry.owner)
+        };
+
+        let record_id = object::id(&new_record);
+        vector::push_back(&mut registry.records, record_id);
+        
+        // Emit event for tracking
+        event::emit(AuditAddedEvent {
+            auditor: sender,
+            timestamp: clock::timestamp_ms(clock),
+            nft_id,
+            target_contract
+        });
+        
+        transfer::public_share_object(new_record);
+    }
+
+    // Check if auditor is verified
+    public fun is_verified_auditor(registry: &AuditRegistry, addr: address): bool {
+        vector::contains(&registry.verified_auditors, &addr)
+    }
+
+    // Get all verified auditors
+    public fun get_verified_auditors(registry: &AuditRegistry): &vector<address> {
+        &registry.verified_auditors
+    }
+
+    // Getter for registry owner
+    public fun get_owner(registry: &AuditRegistry): address {
+        registry.owner
+    }
+}

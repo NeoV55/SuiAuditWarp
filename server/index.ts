@@ -4,6 +4,14 @@ import { setupVite, serveStatic, log } from "./vite";
 import { initializeDatabase } from "./initDb";
 
 const app = express();
+
+// Handle raw binary data for Walrus deployment
+app.use('/api/walrus/deploy', express.raw({ 
+  type: '*/*', 
+  limit: '50mb' 
+}));
+
+// Default JSON parsing for other routes
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

@@ -31,7 +31,7 @@ export const auditReports = pgTable("audit_reports", {
 // NFT certificates
 export const nftCertificates = pgTable("nft_certificates", {
   id: serial("id").primaryKey(),
-  auditReportId: integer("audit_report_id").references(() => auditReports.id),
+  auditReportId: integer("audit_report_id").notNull().references(() => auditReports.id),
   mintTxHash: text("mint_tx_hash"),
   nftObjectId: text("nft_object_id"),
   ownerAddress: text("owner_address").notNull(),
@@ -41,7 +41,7 @@ export const nftCertificates = pgTable("nft_certificates", {
 // Cross-chain transactions
 export const bridgeTransactions = pgTable("bridge_transactions", {
   id: serial("id").primaryKey(),
-  auditReportId: integer("audit_report_id").references(() => auditReports.id),
+  auditReportId: integer("audit_report_id").notNull().references(() => auditReports.id),
   sourceChain: text("source_chain").notNull(),
   destChain: text("dest_chain").notNull(),
   sourceTxHash: text("source_tx_hash"),

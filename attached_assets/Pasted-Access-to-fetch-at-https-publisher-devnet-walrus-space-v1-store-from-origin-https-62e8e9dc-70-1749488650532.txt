@@ -1,0 +1,70 @@
+Access to fetch at 'https://publisher-devnet.walrus.space/v1/store' from origin 'https://62e8e9dc-708f-4658-9274-06ccd7f97e1e-00-kq1jzjc3d6og.spock.replit.dev' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+injected.js:1 
+            
+            
+           PUT https://publisher-devnet.walrus.space/v1/store net::ERR_FAILED
+value @ injected.js:1
+uploadToWalrus @ walrus.ts:38
+handleStartAudit @ AuditPage.tsx:198
+await in handleStartAudit
+callCallback2 @ chunk-F34GCA6J.js?v=76ceb527:3680
+invokeGuardedCallbackDev @ chunk-F34GCA6J.js?v=76ceb527:3705
+invokeGuardedCallback @ chunk-F34GCA6J.js?v=76ceb527:3739
+invokeGuardedCallbackAndCatchFirstError @ chunk-F34GCA6J.js?v=76ceb527:3742
+executeDispatch @ chunk-F34GCA6J.js?v=76ceb527:7046
+processDispatchQueueItemsInOrder @ chunk-F34GCA6J.js?v=76ceb527:7066
+processDispatchQueue @ chunk-F34GCA6J.js?v=76ceb527:7075
+dispatchEventsForPlugins @ chunk-F34GCA6J.js?v=76ceb527:7083
+(anonymous) @ chunk-F34GCA6J.js?v=76ceb527:7206
+batchedUpdates$1 @ chunk-F34GCA6J.js?v=76ceb527:18966
+batchedUpdates @ chunk-F34GCA6J.js?v=76ceb527:3585
+dispatchEventForPluginEventSystem @ chunk-F34GCA6J.js?v=76ceb527:7205
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-F34GCA6J.js?v=76ceb527:5484
+dispatchEvent @ chunk-F34GCA6J.js?v=76ceb527:5478
+dispatchDiscreteEvent @ chunk-F34GCA6J.js?v=76ceb527:5455
+walrus.ts:77 Walrus upload error: TypeError: Failed to fetch
+    at value (injected.js:1:6941583)
+    at uploadToWalrus (walrus.ts:38:28)
+    at handleStartAudit (AuditPage.tsx:198:38)
+uploadToWalrus @ walrus.ts:77
+await in uploadToWalrus
+handleStartAudit @ AuditPage.tsx:198
+await in handleStartAudit
+callCallback2 @ chunk-F34GCA6J.js?v=76ceb527:3680
+invokeGuardedCallbackDev @ chunk-F34GCA6J.js?v=76ceb527:3705
+invokeGuardedCallback @ chunk-F34GCA6J.js?v=76ceb527:3739
+invokeGuardedCallbackAndCatchFirstError @ chunk-F34GCA6J.js?v=76ceb527:3742
+executeDispatch @ chunk-F34GCA6J.js?v=76ceb527:7046
+processDispatchQueueItemsInOrder @ chunk-F34GCA6J.js?v=76ceb527:7066
+processDispatchQueue @ chunk-F34GCA6J.js?v=76ceb527:7075
+dispatchEventsForPlugins @ chunk-F34GCA6J.js?v=76ceb527:7083
+(anonymous) @ chunk-F34GCA6J.js?v=76ceb527:7206
+batchedUpdates$1 @ chunk-F34GCA6J.js?v=76ceb527:18966
+batchedUpdates @ chunk-F34GCA6J.js?v=76ceb527:3585
+dispatchEventForPluginEventSystem @ chunk-F34GCA6J.js?v=76ceb527:7205
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-F34GCA6J.js?v=76ceb527:5484
+dispatchEvent @ chunk-F34GCA6J.js?v=76ceb527:5478
+dispatchDiscreteEvent @ chunk-F34GCA6J.js?v=76ceb527:5455
+AuditPage.tsx:209 Walrus upload error: TypeError: Failed to fetch
+    at value (injected.js:1:6941583)
+    at uploadToWalrus (walrus.ts:38:28)
+    at handleStartAudit (AuditPage.tsx:198:38)
+handleStartAudit @ AuditPage.tsx:209
+await in handleStartAudit
+callCallback2 @ chunk-F34GCA6J.js?v=76ceb527:3680
+invokeGuardedCallbackDev @ chunk-F34GCA6J.js?v=76ceb527:3705
+invokeGuardedCallback @ chunk-F34GCA6J.js?v=76ceb527:3739
+invokeGuardedCallbackAndCatchFirstError @ chunk-F34GCA6J.js?v=76ceb527:3742
+executeDispatch @ chunk-F34GCA6J.js?v=76ceb527:7046
+processDispatchQueueItemsInOrder @ chunk-F34GCA6J.js?v=76ceb527:7066
+processDispatchQueue @ chunk-F34GCA6J.js?v=76ceb527:7075
+dispatchEventsForPlugins @ chunk-F34GCA6J.js?v=76ceb527:7083
+(anonymous) @ chunk-F34GCA6J.js?v=76ceb527:7206
+batchedUpdates$1 @ chunk-F34GCA6J.js?v=76ceb527:18966
+batchedUpdates @ chunk-F34GCA6J.js?v=76ceb527:3585
+dispatchEventForPluginEventSystem @ chunk-F34GCA6J.js?v=76ceb527:7205
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-F34GCA6J.js?v=76ceb527:5484
+dispatchEvent @ chunk-F34GCA6J.js?v=76ceb527:5478
+dispatchDiscreteEvent @ chunk-F34GCA6J.js?v=76ceb527:5455
+AuditPage.tsx:263 Audit error: Error: Walrus upload failed
+    at handleStartAudit (AuditPage.tsx:211:17)

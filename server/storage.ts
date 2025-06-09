@@ -6,7 +6,7 @@ import {
   type BridgeTransaction, type InsertBridgeTransaction
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 
 export interface IStorage {
   // User operations
@@ -17,6 +17,7 @@ export interface IStorage {
   // Audit report operations
   getAuditReport(id: number): Promise<AuditReport | undefined>;
   getAuditReportsByUser(userId: number): Promise<AuditReport[]>;
+  getAllAuditReports(): Promise<AuditReport[]>;
   createAuditReport(report: InsertAuditReport): Promise<AuditReport>;
   updateAuditReport(id: number, updates: Partial<InsertAuditReport>): Promise<AuditReport | undefined>;
   
@@ -60,6 +61,43 @@ export class DatabaseStorage implements IStorage {
   
   async getAuditReportsByUser(userId: number): Promise<AuditReport[]> {
     return db.select().from(auditReports).where(eq(auditReports.userId, userId));
+  }
+
+  async getAllAuditReports(): Promise<AuditReport[]> {
+    try {
+      const reports = await db.select({
+        id: auditReports.id,
+        userId: auditReports.userId,
+        contractName: auditReports.contractName,
+        contractCode: auditReports.contractCode,
+        blockchain: auditReports.blockchain,
+        auditResult: auditReports.auditResult,
+        vulnerabilityScore: auditReports.vulnerabilityScore,
+        ipfsHash: auditReports.ipfsHash,
+        pdfUrl: auditReports.pdfUrl,
+        walrusMetadata: auditReports.walrusMetadata,
+        createdAt: auditReports.createdAt,
+        user: {
+          id: users.id,
+          username: users.username
+        }
+      })
+      .from(auditReports)
+      .leftJoin(users, eq(auditReports.userId, users.id))
+      .orderBy(desc(auditReports.createdAt))
+      .limit(50);
+      
+      return reports.map(report => ({
+        ...report,
+        user: report.user && report.user.id ? { 
+          id: report.user.id, 
+          username: report.user.username || 'Unknown' 
+        } : undefined
+      })) as AuditReport[];
+    } catch (error) {
+      console.error("Error fetching all audit reports:", error);
+      return [];
+    }
   }
   
   async createAuditReport(report: InsertAuditReport): Promise<AuditReport> {

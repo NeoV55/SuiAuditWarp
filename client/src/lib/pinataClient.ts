@@ -71,3 +71,6 @@ export async function uploadToIPFS(fileBlob: Blob, fileName: string): Promise<st
 export function getIPFSUrl(ipfsHash: string): string {
   return `https://ipfs.io/ipfs/${ipfsHash}`;
 }
+
+// Export alias for compatibility
+export const pinFileToIPFS = uploadToIPFS;
