@@ -7,7 +7,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
  * @returns A detailed audit report as a string
  */
 export async function runAudit(contractCode: string): Promise<string> {
-  const apiKey = "AIzaSyAVgd5WU8k-AxshgKnMLU8REEhNGT2GUZc";
+  const apiKey = "";
 
   if (!apiKey) {
     console.warn("Gemini API key is not configured, using demo mode");
